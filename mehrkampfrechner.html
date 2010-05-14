@@ -123,8 +123,8 @@
             pt.addClass("unset");
             disc.addClass("unset");
             
-            pt.change(function (evt) { disc.trigger('update'); });
-            disc.change(function (evt) { pt.trigger('update'); });
+            // pt.change(function (evt) { disc.trigger('update'); });
+            // disc.change(function (evt) { pt.trigger('update'); });
             
             pt.keyup(function(evt) {
               if (evt.keyCode == 9) return;
@@ -160,8 +160,6 @@
                 pt.addClass("unset").removeClass("set setbydisc");
                 pt.val("");
               }
-              // total.trigger('update');
-              // TODO update all unset points to (total.value - set.values) #num of unset values unless total is unset
             });
             disc.bind('update', function (evt) {
               console.log('updating disc');
@@ -173,8 +171,6 @@
                 disc.addClass("unset").removeClass("set setbypt");
                 disc.val("");
               }
-              // total.trigger('update');
-              // TODO update all unset points to (total.value - set.values) #num of unset values unless total is unset
             });
           });
         }
