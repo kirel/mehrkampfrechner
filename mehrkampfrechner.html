@@ -6,10 +6,10 @@
     <script src="http://documentcloud.github.com/underscore/underscore-min.js" type="text/javascript"></script>
     <style>
       input.set {
-        color: red;
+        color: black;
       }
       input.transset {
-        color: gray;
+        color: green;
       }
     </style>
   </head>
@@ -20,7 +20,7 @@
     <input type="text" name="disc2" value="" id="disc2"/>
     <input type="text" name="pt2" value="" id="pt2"/>
     <br/>
-    <input type="text" name="total" value="" id="total" />
+    <input type="text" name="total" value="" id="total"/>
     <script type="text/javascript">
       google.load("jquery", "1.4.1");               
       google.setOnLoadCallback(function() {
@@ -57,29 +57,54 @@
         
         
         $.mehrkampfrechner = function() {  
-          total = $(arguments.shift);
+          var fst = _(arguments).first();
+          var total = $(fst.total);
+          var parts = _(arguments).rest();
           total.addClass("unset");
           total.keyup(function () {
-            pt.addClass("set").removeClass("unset transset");
+            if (total.val()) {
+              total.addClass("set").removeClass("unset transset");
+            } else {
+              total.addClass("unset").removeClass("set transset");
+            }
             // update all unset points to (total.value - set.values) / #num of unset values
           });
-          
-          pts = _(arguments).chain().pluck('pt').map($).value();
-          discs = _(arguments).chain().pluck('disc').map($).value();
-      
-          var updateTotal = function () {
+                          
+          total.bind('update', function (evt) {
+            var pts = $(_(parts).chain().pluck('pt').value().join(', ')).toArray();
+            var unset = _(pts).filter(function(pt) { return $(pt).hasClass("unset"); })
             // if none of the pts is unset
-            if ($(".unset", pts).size() == 0) {
-              total.value = _(pts).chain()
-                .pluck('value')
-                .reduce(0, function(memo, num){ return memo + num })
-                .value();
+            if (unset.length == 0) {
+              console.log('updating total');
+              total.addClass("transset").removeClass("set unset");
+              var res = 0.0
+              $.each(parts, function(index, val) {
+                console.log(val.parsept($(val.pt).val()));
+                res += val.parsept($(val.pt).val());
+              });
+              total.val(fst.showtotal(res));
             }
-          }
+            else if (!total.hasClass("set")) {
+              total.addClass("unset").removeClass("transset unset");
+              total.val("");
+            }
+            else {
+              // total is set manually - thus update all unset pts TODO
+              $.each(parts, function(index, val) {
+                console.log(val.parsept($(val.pt).val()));
+                res += val.parsept($(val.pt).val());
+              });
+            }
+          });
           
-          var updateUnset = function () {
-            
-          }
+          // var updateUnset = function () {
+          //   if (total.hasClass('set')) {
+          //     // compute total.val() - $(".set", pts).vals
+          //     _($(".unset", pts)).each(function(){
+          //       // compute 
+          //     })
+          //   }
+          // }
           
           var coderange = function(from, to) { return function(code) { return code >= from && code <= to; } }
           var tab = coderange(9,9)
@@ -87,42 +112,79 @@
           var digit = coderange(48,57);
           var arrows = coderange(37,40); // left up right down
           
-          $.each(arguments, function(index, val) {
+          $.each(parts, function(index, val) {
             var pt = $(val.pt);
             var disc = $(val.disc);
             pt.addClass("unset");
             disc.addClass("unset");
-            pt.change(function(){console.log("pt changed");});
-            pt.keyup(function (evt) {git
+            
+            pt.change(function (evt) { disc.trigger('update'); });
+            disc.change(function (evt) { pt.trigger('update'); });
+            
+            pt.keyup(function(evt) {
               if (evt.keyCode == 9) return;
-              pt.addClass("set").removeClass("unset transset");
-              disc.addClass("transset").removeClass("set unset");
-              var compute = _.compose(val.showdisc, val.pt2disc, val.parsept)
-              disc.val(compute(pt.val()));
-              // TODO update total if none of the pt's is unset
-              // TODO update all unset points to (total.value - set.values) #num of unset values unless total is unset
-            });
-            disc.change(function(){console.log("disc changed");});
+              if (pt.val()) {
+                pt.addClass("set").removeClass("unset transset");
+              } else {
+                pt.addClass("unset").removeClass("set transset");
+              }
+              // update disc
+              disc.trigger('update');
+            });            
             disc.keyup(function (evt) {
               if (evt.keyCode == 9) return;
-              disc.addClass("set").removeClass("unset transset");        
-              pt.addClass("transset").removeClass("set unset");
-              var compute = _.compose(val.showpt, val.disc2pt, val.parsedisc)
-              pt.val(compute(disc.val()));
-              // TODO update total if none of the pt's is unset
+              if (disc.val()) {
+                disc.addClass("set").removeClass("unset transset");
+              } else {
+                disc.addClass("unset").removeClass("set transset");
+              }
+              // update pt
+              pt.trigger('update');
+            });
+
+            pt.bind('update', function (evt) {
+              // get the info from disc
+              console.log('updating pt');
+              if (disc.val()) {
+                pt.addClass("transset").removeClass("set unset");
+                var compute = _.compose(val.showpt, val.disc2pt, val.parsedisc);
+                pt.val(compute(disc.val()));
+              } else {
+                pt.addClass("unset").removeClass("set transset");
+                pt.val("");
+              }
+              total.trigger('update');
+              // TODO update all unset points to (total.value - set.values) #num of unset values unless total is unset
+            });
+            disc.bind('update', function (evt) {
+              console.log('updating disc');
+              if (pt.val()) {
+                disc.addClass("transset").removeClass("set unset");
+                var compute = _.compose(val.showdisc, val.pt2disc, val.parsept);
+                disc.val(compute(pt.val()));
+              } else {
+                disc.addClass("unset").removeClass("set transset");
+                disc.val("");
+              }
+              total.trigger('update');
               // TODO update all unset points to (total.value - set.values) #num of unset values unless total is unset
             });
           });
         }
           
-        $.mehrkampfrechner("#total",
+        $.mehrkampfrechner(
+          {
+            total:  "#total",
+            parsetotal: parseFloat,
+            showtotal: _.identity            
+          },
           {
             disc:    "#disc1",
             pt:      "#pt1",
             pt2disc: function (x) { return 2*x; },
             disc2pt: function (x) { return x/2; },
-            parsedisc: parseInt,
-            parsept: parseInt,
+            parsedisc: parseFloat,
+            parsept: parseFloat,
             showdisc: _.identity,
             showpt: _.identity
           },
@@ -131,8 +193,8 @@
             pt:      "#pt2",
             pt2disc: function (x) { return 2*x; },
             disc2pt: function (x) { return x/2; },
-            parsedisc: parseInt,
-            parsept: parseInt,
+            parsedisc: parseFloat,
+            parsept: parseFloat,
             showdisc: _.identity,
             showpt: _.identity
           }        
