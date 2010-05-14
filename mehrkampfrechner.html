@@ -8,19 +8,10 @@
       input.set {
         color: black;
       }
-      input.transset {
+      input.setbypts, input.setbypt, input.setbydisc, input.setbytotal {
         color: green;
       }
     </style>
-  </head>
-  <body>
-    <input type="text" name="disc1" value="" id="disc1"/>
-    <input type="text" name="pt1" value="" id="pt1"/>
-    <br/>
-    <input type="text" name="disc2" value="" id="disc2"/>
-    <input type="text" name="pt2" value="" id="pt2"/>
-    <br/>
-    <input type="text" name="total" value="" id="total"/>
     <script type="text/javascript">
       google.load("jquery", "1.4.1");               
       google.setOnLoadCallback(function() {
@@ -34,15 +25,20 @@
         *   DAMM aller Klassen
         */
         
-        var frun = function (d,a,c) { return function(m) { return (d/m-a)/c; } }
-        var fjump = function (a,c) { return function(m) { return (Math.sqrt(x)-a)/c; } }
-        var fthrow = fjump;
+        var run_val2pt = function (d,a,c) { return function(m) { return (d/m-a)/c; } }
+        var run_pt2val = function (d,a,c) { return function(m) { return d/(m*c+a); } }
+        var jump_val2pt = function (a,c) { return function(m) { return (Math.sqrt(m)-a)/c; } }
+        var jump_pt2val = function (a,c) { return function(m) { return Math.pow(m*c+a, 2); } }
+        var throw_val2pt = jump_val2pt;
+        var throw_pt2val = jump_pt2val;
         
         var formulasM = {
-          "50 m": frun(50, 3.79, 0.0069),
-          "60 m": frun(60, 4.20312, 0.00639),
+          "50m_val2pt": run_val2pt(50, 3.79, 0.0069),
+          "50m_pt2val": run_pt2val(50, 3.79, 0.0069),
+          // "60 m": frun(60, 4.20312, 0.00639),
         //  "75 m": [75, 4.1, 0.00664],
-        //  "100 m" => [100, 4.34100, 0.00676],
+          // "100m": frun(100, 4.34100, 0.00676),
+          // "100mInv": frunInv(100, 4.34100, 0.00676),
         //  "200 m" => [200, 3.60400, 0.00760],
         //  "400 m" => [400, 2.96700, 0.00716],
         //  "800 m" => [800, 2.32500, 0.00644],
@@ -51,8 +47,10 @@
         //  "60 m Hürden" => [60, 3.04, 0.0056],
         //  # TODO andere Hürden
         //  "4 x 75 m Staffel" => [300, 4.1, 0.00338],
-          "Weitsprung": fjump(1.15028, 0.00219),
-          "200 g Ballwurf": fthrow(1.936, 0.0124)
+          "Weit_val2pt": jump_val2pt(1.15028, 0.00219),
+          "Weit_pt2val": jump_pt2val(1.15028, 0.00219),
+          "200g_val2pt": throw_val2pt(1.936, 0.0124),
+          "200g_pt2val": throw_pt2val(1.936, 0.0124),
         }
         
         
@@ -71,6 +69,7 @@
           });
                           
           total.bind('update', function (evt) {
+            // check for unset and setbytotal pts
             var pts = $(_(parts).chain().pluck('pt').value().join(', ')).toArray();
             var unset = _(pts).filter(function(pt) { return $(pt).hasClass("unset") || $(pt).hasClass("setbytotal"); })
             // if none of the pts is unset
@@ -83,13 +82,16 @@
                 res += val.parsept($(val.pt).val());
               });
               total.val(fst.showtotal(res));
+              total.attr('disabled', 'disabled');
             }
+            // total is not set manually - clear!
             else if (!total.hasClass("set")) {
-              total.addClass("unset").removeClass("setbypts unset");
+              total.addClass("unset").removeClass("setbypts set");
               total.val("");
+              total.attr('disabled', '');
             }
+            // total is set manually - thus update all unset pts
             else {
-              // total is set manually - thus update all unset pts
               var set = 0.0;
               $.each(parts, function(index, val) {
                 var pt = $(val.pt);
@@ -105,6 +107,7 @@
                 }
                 $(val.disc).trigger('update');
               });
+              total.attr('disabled', '');
             }
           });
           
@@ -183,20 +186,30 @@
             showtotal: _.identity            
           },
           {
-            disc:    "#disc1",
-            pt:      "#pt1",
-            pt2disc: function (x) { return 2*x; },
-            disc2pt: function (x) { return x/2; },
+            disc:    "#50m",
+            pt:      "#50mpt",
+            pt2disc: formulasM['50m_pt2val'],
+            disc2pt: formulasM['50m_val2pt'],
             parsedisc: parseFloat,
             parsept: parseFloat,
             showdisc: _.identity,
             showpt: _.identity
           },
           {
-            disc:    "#disc2",
-            pt:      "#pt2",
-            pt2disc: function (x) { return 2*x; },
-            disc2pt: function (x) { return x/2; },
+            disc:    "#Weit",
+            pt:      "#Weitpt",
+            pt2disc: formulasM['Weit_pt2val'],
+            disc2pt: formulasM['Weit_val2pt'],
+            parsedisc: parseFloat,
+            parsept: parseFloat,
+            showdisc: _.identity,
+            showpt: _.identity
+          },
+          {
+            disc:    "#200g",
+            pt:      "#200gpt",
+            pt2disc: formulasM['200g_pt2val'],
+            disc2pt: formulasM['200g_val2pt'],
             parsedisc: parseFloat,
             parsept: parseFloat,
             showdisc: _.identity,
@@ -205,5 +218,18 @@
           );
         });
     </script>
+    
+  </head>
+  <body>
+    50m: <input type="text" name="50m" value="" id="50m"/> s
+    <input type="text" name="50mpt" value="" id="50mpt"/> Punkte
+    <br/>
+    Weit: <input type="text" name="Weit" value="" id="Weit"/> s
+    <input type="text" name="Weitpt" value="" id="Weitpt"/> Punkte
+    <br/>
+    200g Ball: <input type="text" name="200g" value="" id="200g"/> s
+    <input type="text" name="200gpt" value="" id="200gpt"/> Punkte
+    <br/>
+    Gesamt: <input type="text" name="total" value="" id="total"/> Punkte
   </body>
 </html>
