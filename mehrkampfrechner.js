@@ -44,10 +44,10 @@ var arrows = coderange(37,40); // left up right down
 
 /* helper functions */
 $.fn.extend({
-  set: function(val) {
-    $(this).removeClass().addClass("set").val(val);
+  set: function() {
+    $(this).removeClass().addClass("set");
   },
-  calculated: function(val) {
+  calculate: function(val) {
     $(this).removeClass().addClass("calculated").val(val);
   },
   unset: function() {
@@ -80,31 +80,67 @@ gets arguments of form
 $.fn.mehrkampfrechner = function(disciplines) {  
   var parsepts = parseInt;
   var showpts = _.identity;
+  var rechner = this;
   
-  // set up all the elements
-  var template =  '{{#disciplines}}' +
-                  // discipline field
-                  '<div class="discipline">' +
-                  '<span class="name">{{name}}</span>' +
-                  '<input id="{{id}}" type="text"/>'
-                  '<span class="unit">{{unit}}</span>' +
-                  '</div>' +
-                  // points field
-                  '<div class="pts">' +
-                  '<input id="{{id}}pts" type="text"/>' +
-                  '<span class="pts">Punkte</span>' +
-                  '</div>' +
-                  '{{/disciplines}}' +
-                  // total field
-                  '<div class="total">' +
-                  '<span class="total">Gesamt</span>' +
-                  '<input id="total" type="text"/>' +
-                  '<span class="pts">Punkte</span>' +
-                  '</div>' +
-                  ''
+  // set up the html
+  var template =  '{{#disciplines}}<div class="discipline"><span class="name">{{name}}</span><input id="{{id}}"  type="text"/><span class="unit">{{unit}}</span></div><div class="pts"><input id="{{id}}pts" type="text"/><span class="pts">Punkte</span></div>{{/disciplines}}<div class="total"><span class="total">Gesamt</span><input id="total" type="text"/><span class="pts">Punkte</span></div>'
   var html = $.mustache(template, { "disciplines": disciplines })
   
-  $(this).html(html);
+  $(rechner).html(html);
+  // setup the interaction
+  $.each(disciplines, function(index, discipline) {
+    // setup disc interaction
+    $('#'+discipline.id, rechner).keyup(function() {
+      var val = $(this).val();
+      if (!val) {
+        $(this).unset();
+      }
+      else {
+        $(this).set();
+        $('#'+discipline.id+'pts', rechner).trigger('update');
+        $('#total', rechner).trigger('update');
+        $('div.pts input.unset').trigger('update');
+      }
+    });
+    // setup pts interaction
+    $('#'+discipline.id+'pts', rechner).keyup(function() {
+      var val = $(this).val();
+      if (!val) {
+        $(this).unset();
+      }
+      else {
+        $(this).set();
+        $('#'+discipline.id, rechner).calculate($(this).val());        
+      }
+    });
+    
+    /* TODO
+    update for disc ~>
+      if pts is set
+        update from pts
+      else
+        unset
+    update for pts ~>
+      if disc is set
+        update from disc
+      else if total is set
+        update from total
+      else
+        unset
+    
+    update for total ~>
+      if no pts are unset
+        update from all pts
+      else if total is set
+        do nothing
+      else
+        do nothing
+    */
+    
+  });
+  
+  
+  // update events
       
   /* interaction */
   /*
