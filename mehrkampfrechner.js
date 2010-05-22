@@ -118,6 +118,9 @@ $.fn.mehrkampfrechner = function(disciplines) {
     }
   }
   
+  var parsept = parseInt;
+  var showpt = Math.floor; // FIXME
+  
   // setup the interaction
   $.each(disciplines, function(index, discipline) {
     // setup disc interaction
@@ -179,10 +182,12 @@ $.fn.mehrkampfrechner = function(disciplines) {
       var pts = $('#'+discipline.id+'pts', rechner);
       var total = $('#total', rechner);
       if (pts.isSet()) {
-        $(this).calculate('set from pts'); // TODO
+        var calculate = _.compose(discipline.showdisc, discipline.pt2disc, parsept);
+        $(this).calculate(calculate(pts.val()));
       }
       else if (total.isSet()) {
-        $(this).unset('set from pts through total'); // TODO
+        var calculate = _.compose(discipline.showdisc, discipline.pt2disc, parsept);
+        $(this).unset(calculate(pts.val()));
       }
       else {
         $(this).unset();
@@ -203,10 +208,12 @@ $.fn.mehrkampfrechner = function(disciplines) {
       var total = $('#total', rechner);
       // FIXME do I need if $(this).isSet() ?
       if (disc.isSet()) {
-        $(this).calculate('set from pts'); // TODO
+        var calculate = _.compose(showpt, discipline.disc2pt, discipline.parsedisc);
+        $(this).calculate(calculate(disc.val()));
       }
       else if (total.isSet()) {
-        $(this).unset('set from total'); // TODO
+        var calculate = function() { return 1; } // TODO crazy math
+        $(this).unset(calculate(total.val()));
       }
       else {
         $(this).unset();
@@ -226,7 +233,14 @@ $.fn.mehrkampfrechner = function(disciplines) {
   */
   $('#total', rechner).bind('update', function() {
     if ($('div.pts input.unset').size() == 0) {
-      $(this).calculate('set from points');
+      var calculate = function () {
+        var totalpts = 0;
+        $("div.pts input").each(function(index, pts) {
+          totalpts += parsept($(pts).val());
+        });
+        return showpt(totalpts);
+      }
+      $(this).calculate(calculate());
     }
     else if (!$(this).isSet()) {
       $(this).unset();
