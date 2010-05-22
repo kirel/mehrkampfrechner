@@ -50,17 +50,28 @@ $.fn.extend({
   calculate: function(val) {
     $(this).removeClass().addClass("calculated").val(val);
   },
-  unset: function() {
-    $(this).removeClass().addClass("unset").val('');
+  unset: function(val) {
+    if (val) {      
+      $(this).removeClass().addClass("unset").val(val);
+    }
+    else {
+      $(this).removeClass().addClass("unset").val('');
+    }
   },
   isSet: function() {
-    elem.hasClass("set");
+    return this.hasClass("set");
   },
   isCalculated: function() {
-    elem.hasClass("calculated");
+    return this.hasClass("calculated");
   },
   isUnset: function() {
-    elem.hasClass("unset");
+    return this.hasClass("unset");
+  },
+  disable: function() {
+    this.attr('disabled', true);
+  },
+  enable: function() {
+    this.attr('disabled', false);
   }
 });
 
@@ -81,12 +92,32 @@ $.fn.mehrkampfrechner = function(disciplines) {
   var parsepts = parseInt;
   var showpts = _.identity;
   var rechner = this;
-  
+    
   // set up the html
   var template =  '{{#disciplines}}<div class="discipline"><span class="name">{{name}}</span><input id="{{id}}"  type="text"/><span class="unit">{{unit}}</span></div><div class="pts"><input id="{{id}}pts" type="text"/><span class="pts">Punkte</span></div>{{/disciplines}}<div class="total"><span class="total">Gesamt</span><input id="total" type="text"/><span class="pts">Punkte</span></div>'
   var html = $.mustache(template, { "disciplines": disciplines })
   
   $(rechner).html(html);
+  
+  // helper
+  var disenable = function () {
+    var total = $('#total', rechner);
+    // disenable pts/disc
+    if (total.isSet() && $('div.pts input.unset').size() == 1) {
+      $('div.pts input.unset, div.discipline input.unset').disable();
+    }
+    else {
+      $('div.pts input.unset, div.discipline input.unset').enable();
+    }
+    // disenable total
+    if ($('div.pts input.unset').size() == 0) {
+      total.disable();
+    }
+    else {
+      total.enable();
+    }
+  }
+  
   // setup the interaction
   $.each(disciplines, function(index, discipline) {
     // setup disc interaction
@@ -97,10 +128,12 @@ $.fn.mehrkampfrechner = function(disciplines) {
       }
       else {
         $(this).set();
-        $('#'+discipline.id+'pts', rechner).trigger('update');
-        $('#total', rechner).trigger('update');
-        $('div.pts input.unset').trigger('update');
       }
+      $('#'+discipline.id+'pts', rechner).trigger('update');
+      $('#total', rechner).trigger('update');
+      $('div.pts input.unset').trigger('update');
+      $('div.discipline input.unset').trigger('update');
+      disenable();
     });
     // setup pts interaction
     $('#'+discipline.id+'pts', rechner).keyup(function() {
@@ -110,16 +143,53 @@ $.fn.mehrkampfrechner = function(disciplines) {
       }
       else {
         $(this).set();
-        $('#'+discipline.id, rechner).calculate($(this).val());        
       }
-    });
-    
-    /* TODO
+      $('#'+discipline.id, rechner).trigger('update');
+      $('#total', rechner).trigger('update');
+      $('div.pts input.unset').trigger('update');
+      $('div.discipline input.unset').trigger('update');
+      disenable();
+    });    
+  });
+
+  $('#total', rechner).keyup(function() {
+    var val = $(this).val();
+    if (!val) {
+      $(this).unset();
+    }
+    else {
+      $(this).set();      
+    }
+    $('div.pts input.unset').trigger('update');
+    $('div.discipline input.unset').trigger('update');
+    disenable();
+  });    
+  
+  // setup update events for pts and disc
+  $.each(disciplines, function(index, discipline) {
+    // setup update event for disc
+    /*
     update for disc ~>
       if pts is set
         update from pts
       else
         unset
+    */
+    $('#'+discipline.id, rechner).bind('update', function() {
+      var pts = $('#'+discipline.id+'pts', rechner);
+      var total = $('#total', rechner);
+      if (pts.isSet()) {
+        $(this).calculate('set from pts'); // TODO
+      }
+      else if (total.isSet()) {
+        $(this).unset('set from pts through total'); // TODO
+      }
+      else {
+        $(this).unset();
+      }
+    });
+    // setup update event for pts
+    /*
     update for pts ~>
       if disc is set
         update from disc
@@ -127,17 +197,51 @@ $.fn.mehrkampfrechner = function(disciplines) {
         update from total
       else
         unset
-    
-    update for total ~>
-      if no pts are unset
-        update from all pts
-      else if total is set
-        do nothing
-      else
-        do nothing
     */
-    
+    $('#'+discipline.id+'pts', rechner).bind('update', function() {
+      var disc = $('#'+discipline.id, rechner);
+      var total = $('#total', rechner);
+      // FIXME do I need if $(this).isSet() ?
+      if (disc.isSet()) {
+        $(this).calculate('set from pts'); // TODO
+      }
+      else if (total.isSet()) {
+        $(this).unset('set from total'); // TODO
+      }
+      else {
+        $(this).unset();
+      }
+    });
   });
+      
+  // setup update event for total
+  /*
+  update for total ~>
+    if no pts are unset
+      update from all pts
+    else if total is set
+      do nothing
+    else
+      do nothing
+  */
+  $('#total', rechner).bind('update', function() {
+    if ($('div.pts input.unset').size() == 0) {
+      $(this).calculate('set from points');
+    }
+    else if (!$(this).isSet()) {
+      $(this).unset();
+    }
+    // else do nothing
+  });
+  
+  // now unset everything
+  $.each(disciplines, function(index, discipline) {
+    // setup disc interaction
+    $('#'+discipline.id, rechner).unset();
+    // setup pts interaction
+    $('#'+discipline.id+'pts', rechner).unset();
+  });
+  $('#total', rechner).unset();
   
   
   // update events
