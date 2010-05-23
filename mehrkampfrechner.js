@@ -100,8 +100,19 @@ $.fn.mehrkampfrechner = function(disciplines) {
   var rechner = this;
     
   // set up the html
-  var template =  '{{#disciplines}}<div class="discipline"><span class="name">{{name}}</span><input id="{{id}}"  type="text"/><span class="unit">{{unit}}</span></div><div class="pts"><input id="{{id}}pts" type="text"/><span class="pts">Punkte</span></div>{{/disciplines}}<div class="total"><span class="total">Gesamt</span><input id="total" type="text"/><span class="pts">Punkte</span></div>'
-  var html = $.mustache(template, { "disciplines": disciplines }); 
+  
+  var t = ''
+  t+= '<table>'
+  t+= '<thead><tr><th>Disziplin</th><th>Leistung</th><th>Einheit</th><th>Punkte</th></tr></thead>'
+  t+= '<tfoot><tr><td colspan="3">Gesamt</td><td class="total"><input id="total" type="text"/></td></tr></tfoot>'
+  t+= '{{#disciplines}}'
+  t+= '<tr>'
+  t+= '<td class="name">{{name}}</td><td class="discipline"><input id="{{id}}" type="text"/></td><td class="unit">{{unit}}</td>'
+  t+= '<td class="pts"><input id="{{id}}pts" type="text"/></td>'
+  t+= '</tr>'
+  t+= '{{/disciplines}}'
+  t+= '</table>'
+  var html = $.mustache(t, { "disciplines": disciplines }); 
   
   $(rechner).html(html);
   
@@ -109,14 +120,14 @@ $.fn.mehrkampfrechner = function(disciplines) {
   var disenable = function () {
     var total = $('#total', rechner);
     // disenable pts/disc
-    if (total.isSet() && $('div.pts input.unset').size() == 1) {
-      $('div.pts input.unset, div.discipline input.unset').disable();
+    if (total.isSet() && $('td.pts input.unset').size() == 1) {
+      $('td.pts input.unset, td.discipline input.unset').disable();
     }
     else {
-      $('div.pts input.unset, div.discipline input.unset').enable();
+      $('td.pts input.unset, td.discipline input.unset').enable();
     }
     // disenable total
-    if ($('div.pts input.unset').size() == 0) {
+    if ($('td.pts input.unset').size() == 0) {
       total.disable();
     }
     else {
@@ -130,8 +141,8 @@ $.fn.mehrkampfrechner = function(disciplines) {
   
   var fillShareQueue = function () {
     var total = $("#total", rechner);
-    var set = $("div.pts input:not(.unset)", rechner);
-    var unset = $("div.pts input.unset", rechner);
+    var set = $("td.pts input:not(.unset)", rechner);
+    var unset = $("td.pts input.unset", rechner);
     // get points already achieved
     var currentpts = 0;
     set.each(function(index, pts) {
@@ -179,8 +190,8 @@ $.fn.mehrkampfrechner = function(disciplines) {
       $('#'+discipline.id+'pts', rechner).trigger('update');
       $('#total', rechner).trigger('update');
       fillShareQueue();
-      $('div.pts input.unset', rechner).trigger('update');
-      $('div.discipline input.unset', rechner).trigger('update');
+      $('td.pts input.unset', rechner).trigger('update');
+      $('td.discipline input.unset', rechner).trigger('update');
       disenable();
     });
     // setup pts interaction
@@ -195,8 +206,8 @@ $.fn.mehrkampfrechner = function(disciplines) {
       $('#'+discipline.id, rechner).trigger('update');
       $('#total', rechner).trigger('update');
       fillShareQueue();
-      $('div.pts input.unset', rechner).trigger('update');
-      $('div.discipline input.unset', rechner).trigger('update');
+      $('td.pts input.unset', rechner).trigger('update');
+      $('td.discipline input.unset', rechner).trigger('update');
       disenable();
     });    
   });
@@ -210,8 +221,8 @@ $.fn.mehrkampfrechner = function(disciplines) {
       $(this).set();
     }
     fillShareQueue();
-    $('div.pts input.unset', rechner).trigger('update');
-    $('div.discipline input.unset', rechner).trigger('update');
+    $('td.pts input.unset', rechner).trigger('update');
+    $('td.discipline input.unset', rechner).trigger('update');
     disenable();
   });    
   
@@ -281,10 +292,10 @@ $.fn.mehrkampfrechner = function(disciplines) {
       do nothing
   */
   $('#total', rechner).bind('update', function() {
-    if ($('div.pts input.unset').size() == 0) {
+    if ($('td.pts input.unset').size() == 0) {
       var calculate = function () {
         var totalpts = 0;
-        $("div.pts input").each(function(index, pts) {
+        $("td.pts input").each(function(index, pts) {
           totalpts += parsept($(pts).val());
         });
         return showpt(totalpts);
