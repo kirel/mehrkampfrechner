@@ -8,17 +8,26 @@
 *   DAMM aller Klassen
 */
 
+var parseSeconds = function (s) {
+  return parseFloat(s.replace(',','.'));
+}
+
 var showSeconds = function (num) {
   return Math.floor(num * Math.pow(10, 2)) / Math.pow(10, 2);
+}
+
+var parseMeters = function (m) {
+  return parseFloat(m.replace(',','.'));
 }
 
 var showMeters = function (num) {
   return Math.ceil(num * Math.pow(10, 2)) / Math.pow(10, 2);
 }
 
-var run_val2pt = function (d,a,c) { return function(m) { return (d/m-a)/c; } }
+// FIXME ensure Math.floor is correct
+var run_val2pt = function (d,a,c) { return function(m) { return Math.floor((d/m-a)/c); } }
 var run_pt2val = function (d,a,c) { return function(m) { return d/(m*c+a); } }
-var jump_val2pt = function (a,c) { return function(m) { return (Math.sqrt(m)-a)/c; } }
+var jump_val2pt = function (a,c) { return function(m) { return Math.floor((Math.sqrt(m)-a)/c); } }
 var jump_pt2val = function (a,c) { return function(m) { return Math.pow(m*c+a, 2); } }
 var throw_val2pt = jump_val2pt;
 var throw_pt2val = jump_pt2val;
