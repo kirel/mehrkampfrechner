@@ -95,7 +95,7 @@ $.fn.mehrkampfrechner = function(disciplines) {
     
   // set up the html
   var template =  '{{#disciplines}}<div class="discipline"><span class="name">{{name}}</span><input id="{{id}}"  type="text"/><span class="unit">{{unit}}</span></div><div class="pts"><input id="{{id}}pts" type="text"/><span class="pts">Punkte</span></div>{{/disciplines}}<div class="total"><span class="total">Gesamt</span><input id="total" type="text"/><span class="pts">Punkte</span></div>'
-  var html = $.mustache(template, { "disciplines": disciplines })
+  var html = $.mustache(template, { "disciplines": disciplines }); 
   
   $(rechner).html(html);
   
@@ -120,6 +120,44 @@ $.fn.mehrkampfrechner = function(disciplines) {
   
   var parsept = parseInt;
   var showpt = Math.floor; // FIXME
+  var sharequeue; // this is used to distribute the left points over the unset pts
+  
+  var fillShareQueue = function () {
+    var total = $("#total", rechner);
+    var set = $("div.pts input:not(.unset)", rechner);
+    var unset = $("div.pts input.unset", rechner);
+    // get points already achieved
+    var currentpts = 0;
+    set.each(function(index, pts) {
+      currentpts += parsept($(pts).val());
+    });
+    console.log('currentpts '+currentpts);
+    // get goal
+    var goalpts = parsept(total.val());
+    console.log('goalpts '+goalpts);
+    // left
+    var leftpts = goalpts - currentpts;
+    console.log('leftpts '+leftpts);
+    // must be spreaded across
+    var num = unset.size();
+    console.log('num '+num);
+    // fill the sharequeue so that foldl(+, sharequeue) == leftpts
+    // initialize
+    sharequeue = [];
+    for (var i = 0; i < num; i++) {
+      sharequeue.push(0);
+      console.log('pushing');
+    }
+    console.log(sharequeue.concat());
+    // fill
+    var j = 0;
+    while (leftpts > 0) {
+      sharequeue[j%num]++;
+      j++;
+      leftpts--;
+    }
+    console.log(sharequeue.concat());
+  }
   
   // setup the interaction
   $.each(disciplines, function(index, discipline) {
@@ -134,8 +172,9 @@ $.fn.mehrkampfrechner = function(disciplines) {
       }
       $('#'+discipline.id+'pts', rechner).trigger('update');
       $('#total', rechner).trigger('update');
-      $('div.pts input.unset').trigger('update');
-      $('div.discipline input.unset').trigger('update');
+      fillShareQueue();
+      $('div.pts input.unset', rechner).trigger('update');
+      $('div.discipline input.unset', rechner).trigger('update');
       disenable();
     });
     // setup pts interaction
@@ -149,8 +188,9 @@ $.fn.mehrkampfrechner = function(disciplines) {
       }
       $('#'+discipline.id, rechner).trigger('update');
       $('#total', rechner).trigger('update');
-      $('div.pts input.unset').trigger('update');
-      $('div.discipline input.unset').trigger('update');
+      fillShareQueue();
+      $('div.pts input.unset', rechner).trigger('update');
+      $('div.discipline input.unset', rechner).trigger('update');
       disenable();
     });    
   });
@@ -161,10 +201,11 @@ $.fn.mehrkampfrechner = function(disciplines) {
       $(this).unset();
     }
     else {
-      $(this).set();      
+      $(this).set();
     }
-    $('div.pts input.unset').trigger('update');
-    $('div.discipline input.unset').trigger('update');
+    fillShareQueue();
+    $('div.pts input.unset', rechner).trigger('update');
+    $('div.discipline input.unset', rechner).trigger('update');
     disenable();
   });    
   
@@ -212,7 +253,9 @@ $.fn.mehrkampfrechner = function(disciplines) {
         $(this).calculate(calculate(disc.val()));
       }
       else if (total.isSet()) {
-        var calculate = function() { return 1; } // TODO crazy math
+        var calculate = function() {
+          return showpt(sharequeue.pop());
+        }
         $(this).unset(calculate(total.val()));
       }
       else {
