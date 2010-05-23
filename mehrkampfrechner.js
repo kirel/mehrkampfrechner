@@ -8,6 +8,14 @@
 *   DAMM aller Klassen
 */
 
+var numberWithPrecision = function (num, prec) {
+  return Math.ceil(num * Math.pow(10, prec)) / Math.pow(10, prec);
+}
+
+var withPrecision2 = function (num) {
+  return numberWithPrecision(num, 2);
+}
+
 var run_val2pt = function (d,a,c) { return function(m) { return (d/m-a)/c; } }
 var run_pt2val = function (d,a,c) { return function(m) { return d/(m*c+a); } }
 var jump_val2pt = function (a,c) { return function(m) { return (Math.sqrt(m)-a)/c; } }
