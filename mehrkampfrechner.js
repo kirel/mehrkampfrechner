@@ -8,12 +8,12 @@
 *   DAMM aller Klassen
 */
 
-var numberWithPrecision = function (num, prec) {
-  return Math.ceil(num * Math.pow(10, prec)) / Math.pow(10, prec);
+var showSeconds = function (num) {
+  return Math.floor(num * Math.pow(10, 2)) / Math.pow(10, 2);
 }
 
-var withPrecision2 = function (num) {
-  return numberWithPrecision(num, 2);
+var showMeters = function (num) {
+  return Math.ceil(num * Math.pow(10, 2)) / Math.pow(10, 2);
 }
 
 var run_val2pt = function (d,a,c) { return function(m) { return (d/m-a)/c; } }
@@ -97,8 +97,6 @@ gets arguments of form
 */
 
 $.fn.mehrkampfrechner = function(disciplines) {  
-  var parsepts = parseInt;
-  var showpts = _.identity;
   var rechner = this;
     
   // set up the html
@@ -127,7 +125,7 @@ $.fn.mehrkampfrechner = function(disciplines) {
   }
   
   var parsept = parseInt;
-  var showpt = Math.floor; // FIXME
+  var showpt = function (num) { return Math.floor(num) + '' };
   var sharequeue; // this is used to distribute the left points over the unset pts
   
   var fillShareQueue = function () {
@@ -172,7 +170,7 @@ $.fn.mehrkampfrechner = function(disciplines) {
     // setup disc interaction
     $('#'+discipline.id, rechner).keyup(function() {
       var val = $(this).val();
-      if (!val) {
+      if (val === '') {
         $(this).unset();
       }
       else {
@@ -188,7 +186,7 @@ $.fn.mehrkampfrechner = function(disciplines) {
     // setup pts interaction
     $('#'+discipline.id+'pts', rechner).keyup(function() {
       var val = $(this).val();
-      if (!val) {
+      if (val === '') {
         $(this).unset();
       }
       else {
@@ -205,7 +203,7 @@ $.fn.mehrkampfrechner = function(disciplines) {
 
   $('#total', rechner).keyup(function() {
     var val = $(this).val();
-    if (!val) {
+    if (val === '') {
       $(this).unset();
     }
     else {
