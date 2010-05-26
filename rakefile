@@ -1,0 +1,6 @@
+task :default => :package
+
+desc "package"
+task :package do
+  system 'java -jar compiler.jar --js=underscore-min.js --js=jquery-1.4.2.min.js --js=jquery.mustache.js --js=mehrkampfrechner.js --js_output_file=mehrkampfrechner.min.js'
+end
