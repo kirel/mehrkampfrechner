@@ -1,14 +1,3 @@
-/**
-* Nationale Punktetabelle, Ausgabe 1994 des DLV
-*
-* Sie gilt für die Auswertung aller:
-*   Schülermehrkämpfe
-*   Blockwettkämpfe
-*   Mannschaftsmehrkämpfe einschl. DMM, DJMM, DSMM,
-*   DAMM aller Klassen
-*/
-
-
 // business logic here
 
 var parseSeconds = function (s) {
@@ -338,7 +327,7 @@ var formulas = {
       "hoch_val2pt": jump_val2pt(0.841, 0.0008),
       "hoch_pt2val": jump_pt2val(0.841, 0.0008),
       "200g_val2pt": throw_val2pt(1.936, 0.0124),
-      "200g_pt2val": throw_pt2val(1.936, 0.0124),    
+      "200g_pt2val": throw_pt2val(1.936, 0.0124) 
   }
 }
 
@@ -418,7 +407,6 @@ var rechner = [
       }
     ]
   }
-  
 ]
 /* templates */
 
