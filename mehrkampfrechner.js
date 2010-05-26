@@ -411,7 +411,10 @@ var rechner = [
 ]
 /* templates */
 
-var template = '<select class="nav">{{#rechner}}<option value="{{id}}">{{name}}</option>{{/rechner}}</select>{{#rechner}}<div id="{{id}}" class="rechner"></div>{{/rechner}}';
+var template = '\
+<select class="nav">{{#rechner}}<option value="{{id}}">{{name}}</option>{{/rechner}}</select>{{#rechner}}\
+<div id="{{id}}" class="rechner"></div>{{/rechner}}\
+<small><a href="http://www.kirel.de/mehrkampfrechner">Mehrkampfrechner</a> &copy;2010 Daniel Kirsch</small>';
 var html = $.mustache(template, { rechner: rechner }); 
 
 document.write('<div id="kirel-mehrkampf-rechner"></div>');
@@ -457,4 +460,5 @@ s = '\
   </style>\
 ';
 $('head').prepend(s);
+
 })(jQuery);
