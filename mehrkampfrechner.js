@@ -124,24 +124,18 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
     set.each(function(index, pts) {
       currentpts += parsept($(pts).val());
     });
-    console.log('currentpts '+currentpts);
     // get goal
     var goalpts = parsept(total.val());
-    console.log('goalpts '+goalpts);
     // left
     var leftpts = goalpts - currentpts;
-    console.log('leftpts '+leftpts);
     // must be spreaded across
     var num = unset.size();
-    console.log('num '+num);
     // fill the sharequeue so that foldl(+, sharequeue) == leftpts
     // initialize
     sharequeue = [];
     for (var i = 0; i < num; i++) {
       sharequeue.push(0);
-      console.log('pushing');
     }
-    console.log(sharequeue.concat());
     // fill
     var j = 0;
     while (leftpts > 0) {
@@ -149,7 +143,6 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
       j++;
       leftpts--;
     }
-    console.log(sharequeue.concat());
   }
   
   // setup the interaction
