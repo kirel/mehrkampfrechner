@@ -113,10 +113,11 @@ $.fn.mehrkampfrechner = function(disciplines) {
   var t = ''
   t+= '<table>'
   t+= '<thead><tr><th>Disziplin</th><th>Leistung</th><th>Einheit</th><th>Punkte</th></tr></thead>'
-  t+= '<tfoot><tr><td colspan="3">Gesamt</td><td class="total"><input id="total" type="text"/></td></tr></tfoot>'
+  t+= '<tfoot><tr><td colspan="3"><label for="total">Gesamt</label></td><td class="total"><input id="total" type="text"/></td></tr></tfoot>'
   t+= '{{#disciplines}}'
   t+= '<tr>'
-  t+= '<td class="name">{{name}}</td><td class="discipline"><input id="{{id}}" type="text"/></td><td class="unit">{{unit}}</td>'
+  t+= '<td class="name"><label for="{{id}}">{{name}}</label></td>'
+  t+= '<td class="discipline"><input id="{{id}}" type="text"/></td><td class="unit">{{unit}}</td>'
   t+= '<td class="pts"><input id="{{id}}pts" type="text"/></td>'
   t+= '</tr>'
   t+= '{{/disciplines}}'
@@ -326,6 +327,10 @@ $.fn.mehrkampfrechner = function(disciplines) {
   });
   $('#total', rechner).unset();
   
+  // preselect text
+  $('input', rechner).focus(function () {
+    $(this).select();
+  });
   
   // update events
       
