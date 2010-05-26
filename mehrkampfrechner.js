@@ -79,12 +79,12 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
   t+= '<h2>{{name}}</h2>'
   t+= '<table>'
   t+= '<thead><tr><th>Disziplin</th><th>Leistung</th><th>Einheit</th><th>Punkte</th></tr></thead>'
-  t+= '<tfoot><tr><td colspan="3"><label for="{{ns}}-total">Gesamt</label></td><td class="total"><input id="{{ns}}-total" type="text"/></td></tr></tfoot>'
+  t+= '<tfoot><tr><td colspan="3"><label for="{{ns}}-total">Gesamt</label></td><td class="total"><input id="{{ns}}-total" type="text" tabindex="2"/></td></tr></tfoot>'
   t+= '{{#disciplines}}'
   t+= '<tr>'
   t+= '<td class="name"><label for="{{ns}}-{{id}}">{{name}}</label></td>'
-  t+= '<td class="discipline"><input id="{{ns}}-{{id}}" type="text"/></td><td class="unit">{{unit}}</td>'
-  t+= '<td class="pts"><input id="{{ns}}-{{id}}pts" type="text"/></td>'
+  t+= '<td class="discipline"><input id="{{ns}}-{{id}}" type="text" tabindex="1"/></td><td class="unit">{{unit}}</td>'
+  t+= '<td class="pts"><input id="{{ns}}-{{id}}pts" type="text" tabindex="3"/></td>'
   t+= '</tr>'
   t+= '{{/disciplines}}'
   t+= '</table>'
@@ -412,7 +412,7 @@ var rechner = [
 /* templates */
 
 var template = '\
-<select class="nav">{{#rechner}}<option value="{{id}}">{{name}}</option>{{/rechner}}</select>{{#rechner}}\
+<select class="nav" tabindex="1">{{#rechner}}<option value="{{id}}">{{name}}</option>{{/rechner}}</select>{{#rechner}}\
 <div id="{{id}}" class="rechner"></div>{{/rechner}}\
 <small><a href="http://www.kirel.de/mehrkampfrechner">Mehrkampfrechner</a> &copy;2010 Daniel Kirsch</small>';
 var html = $.mustache(template, { rechner: rechner }); 
