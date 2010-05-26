@@ -362,16 +362,16 @@ var iaaf_formulas = {
     _110mH: iaaf_run(5.74325, 28.5, 1.92),
     _200mH: iaaf_run(3.495, 45.5, 1.81),
     _400mH: iaaf_run(1.1466, 92, 1.81),
-    high: iaaf_jump(0.8465, 75, 1.42),
-    pole: iaaf_jump(0.2797, 100, 1.35),
-    long: iaaf_jump(0.14354, 220, 1.40),
-    triple: iaaf_jump(0.06533, 640, 1.4),
-    shot: iaaf_throw(51.39, 1.5, 1.05),
-    disc: iaaf_throw(12.91, 4, 1.10),
-    javelin: iaaf_throw(10.14,7, 1.08),
-    hammer: iaaf_throw(13.0449, 7, 1.05)
-  },
-}
+    _high: iaaf_jump(0.8465, 75, 1.42),
+    _pole: iaaf_jump(0.2797, 100, 1.35),
+    _long: iaaf_jump(0.14354, 220, 1.40),
+    _triple: iaaf_jump(0.06533, 640, 1.4),
+    _shot: iaaf_throw(51.39, 1.5, 1.05),
+    _disc: iaaf_throw(12.91, 4, 1.10),
+    _javelin: iaaf_throw(10.14,7, 1.08),
+    _hammer: iaaf_throw(13.0449, 7, 1.05)
+  }
+};
 
 var rechner = [
   {
@@ -465,8 +465,8 @@ var rechner = [
       {
         name: "Weitsprung",
         id: "weit",
-        disc2pt: iaaf_formulas.m.long,
-        pt2disc: iaaf_formulas.m.long.inverse,
+        disc2pt: iaaf_formulas.m._long,
+        pt2disc: iaaf_formulas.m._long.inverse,
         parsedisc: parseMeters,
         showdisc: showMeters,
         unit: "m"
@@ -474,8 +474,8 @@ var rechner = [
       {              
         name: "Kugelstoßen",
         id: "kugel",
-        disc2pt: iaaf_formulas.m.shot,
-        pt2disc: iaaf_formulas.m.shot.inverse,
+        disc2pt: iaaf_formulas.m._shot,
+        pt2disc: iaaf_formulas.m._shot.inverse,
         parsedisc: parseMeters,
         showdisc: showMeters,
         unit: "m"
@@ -483,8 +483,8 @@ var rechner = [
       {              
         name: "Hochsprung",
         id: "hoch",
-        disc2pt: iaaf_formulas.m.high,
-        pt2disc: iaaf_formulas.m.high.inverse,
+        disc2pt: iaaf_formulas.m._high,
+        pt2disc: iaaf_formulas.m._high.inverse,
         parsedisc: parseMeters,
         showdisc: showMeters,
         unit: "m"
@@ -510,8 +510,8 @@ var rechner = [
       {              
         name: "Diskus",
         id: "diskus",
-        disc2pt: iaaf_formulas.m.disc,
-        pt2disc: iaaf_formulas.m.disc.inverse,
+        disc2pt: iaaf_formulas.m._disc,
+        pt2disc: iaaf_formulas.m._disc.inverse,
         parsedisc: parseMeters,
         showdisc: showMeters,
         unit: "m"
@@ -519,8 +519,8 @@ var rechner = [
       {              
         name: "Stabhochsprung",
         id: "stab",
-        disc2pt: iaaf_formulas.m.pole,
-        pt2disc: iaaf_formulas.m.pole.inverse,
+        disc2pt: iaaf_formulas.m._pole,
+        pt2disc: iaaf_formulas.m._pole.inverse,
         parsedisc: parseMeters,
         showdisc: showMeters,
         unit: "m"
@@ -528,8 +528,8 @@ var rechner = [
       {              
         name: "Speer",
         id: "speer",
-        disc2pt: iaaf_formulas.m.javelin,
-        pt2disc: iaaf_formulas.m.javelin.inverse,
+        disc2pt: iaaf_formulas.m._javelin,
+        pt2disc: iaaf_formulas.m._javelin.inverse,
         parsedisc: parseMeters,
         showdisc: showMeters,
         unit: "m"
