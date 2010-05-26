@@ -18,7 +18,7 @@ var showMeters = function (num) {
   return Math.ceil(num * Math.pow(10, 2)) / Math.pow(10, 2);
 }
 
-var coderange = function(from, to) { return function(code) { return code >= from && code <= to; } }
+var coderange = function(from, to) { return function(code) { return (code >= from && code <= to); } }
 var tab = coderange(9,9)
 var atoz = coderange(65,90);
 var digit = coderange(48,57);
@@ -149,7 +149,8 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
   // setup the interaction
   $.each(disciplines, function(index, discipline) {
     // setup disc interaction
-    $('#'+ns+'-'+discipline.id, rechner).keyup(function() {
+    $('#'+ns+'-'+discipline.id, rechner).keyup(function(evt) {
+      if (tab(evt.which)||arrows(evt.which)) { return; }
       var val = $(this).val();
       if (val === '') {
         $(this).unset();
@@ -165,7 +166,8 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
       disenable();
     });
     // setup pts interaction
-    $('#'+ns+'-'+discipline.id+'pts', rechner).keyup(function() {
+    $('#'+ns+'-'+discipline.id+'pts', rechner).keyup(function(evt) {
+      if (tab(evt.which)||arrows(evt.which)) { return; }
       var val = $(this).val();
       if (val === '') {
         $(this).unset();
@@ -182,7 +184,8 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
     });    
   });
 
-  total.keyup(function() {
+  total.keyup(function(evt) {
+    if (tab(evt.which)||arrows(evt.which)) { return; }
     var val = $(this).val();
     if (val === '') {
       $(this).unset();
