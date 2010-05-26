@@ -4,3 +4,8 @@ desc "package"
 task :package do
   system 'java -jar compiler.jar --js=underscore-min.js --js=jquery-1.4.2.min.js --js=jquery.mustache.js --js=mehrkampfrechner.js --js_output_file=mehrkampfrechner.min.js'
 end
+
+desc 'release'
+task :release => :package do
+  system 'git co gh-pages && git merge master && git push && git co master'
+end
