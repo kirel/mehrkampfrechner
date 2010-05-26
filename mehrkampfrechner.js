@@ -1,3 +1,4 @@
+(function($) {  
 // business logic here
 
 var parseSeconds = function (s) {
@@ -456,4 +457,4 @@ s = '\
   </style>\
 ';
 $('head').prepend(s);
-
+})(jQuery);

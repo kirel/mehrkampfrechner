@@ -6,6 +6,6 @@ task :package do
 end
 
 desc 'release'
-task :release => :package do
+task :release do
   system 'git co gh-pages && git merge master && git push && git co master'
 end
