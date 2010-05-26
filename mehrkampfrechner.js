@@ -1,3 +1,4 @@
+/* Javascript Mehrkampfrechner (c)2010 Daniel Kirsch */
 (function($) {  
 // business logic here
 
