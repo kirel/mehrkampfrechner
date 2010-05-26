@@ -329,6 +329,50 @@ var formulas = {
   }
 }
 
+var iaaf_run = function (a,b,c) {
+  var fn = function (m) { return Math.floor(a * Math.pow(b-m, c)); };
+  fn.inverse = function (pt) { return b - Math.pow(pt/a,1/c); };
+  return fn;
+}
+var iaaf_throw = function (a,b,c) {
+  var fn = function (m) { return Math.floor(a * Math.pow(m-b, c)); };
+  fn.inverse = function (pt) { return b + Math.pow(pt/a,1/c); };
+  return fn;
+}
+var iaaf_jump = function (a,b,c) {
+  var fn = function (m) { return iaaf_throw(a,b,c)(m*100); };
+  fn.inverse = function (m) { return iaaf_throw(a,b,c).inverse(m)/100; }
+  return fn;
+}
+var iaaf_formulas = {
+  m: {
+    _60m: iaaf_run(58.015, 11.5, 1.81),
+    _100m: iaaf_run(25.4347, 18, 1.81),
+    _200m: iaaf_run(5.8425, 38, 1.81),
+    _300m: iaaf_run(2.58503, 60.1, 1.81),
+    _400m: iaaf_run(1.53775, 82, 1.81),
+    _800m: iaaf_run(0.13279, 235, 1.85),
+    _1000m: iaaf_run(0.08713, 305.5, 1.85),
+    _1500m: iaaf_run(0.03768, 480, 1.85),
+    _3000m: iaaf_run(0.0105, 1005, 1.85),
+    _5000m: iaaf_run(0.00419, 1680, 1.85),
+    _1000m: iaaf_run(0.000415, 4245, 1.9),
+    _3000mHi: iaaf_run(0.00511, 1155, 1.9),
+    _60mH: iaaf_run(20.5173, 15.5, 1.92),
+    _110mH: iaaf_run(5.74325, 28.5, 1.92),
+    _200mH: iaaf_run(3.495, 45.5, 1.81),
+    _400mH: iaaf_run(1.1466, 92, 1.81),
+    high: iaaf_jump(0.8465, 75, 1.42),
+    pole: iaaf_jump(0.2797, 100, 1.35),
+    long: iaaf_jump(0.14354, 220, 1.40),
+    triple: iaaf_jump(0.06533, 640, 1.4),
+    shot: iaaf_throw(51.39, 1.5, 1.05),
+    disc: iaaf_throw(12.91, 4, 1.10),
+    javelin: iaaf_throw(10.14,7, 1.08),
+    hammer: iaaf_throw(13.0449, 7, 1.05)
+  },
+}
+
 var rechner = [
   {
     name: "Dreikampf SB",
@@ -404,12 +448,111 @@ var rechner = [
         unit: "m"
       }
     ]
+  },
+  {
+    name: "Zehnkampf MHK",
+    id: "zkmhk",
+    disciplines: [
+      {
+        name: "100m",
+        id: "100m",
+        disc2pt: iaaf_formulas.m._100m,
+        pt2disc: iaaf_formulas.m._100m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "weit",
+        disc2pt: iaaf_formulas.m.long,
+        pt2disc: iaaf_formulas.m.long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "Kugelstoßen",
+        id: "kugel",
+        disc2pt: iaaf_formulas.m.shot,
+        pt2disc: iaaf_formulas.m.shot.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "Hochsprung",
+        id: "hoch",
+        disc2pt: iaaf_formulas.m.high,
+        pt2disc: iaaf_formulas.m.high.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {
+        name: "400m",
+        id: "400m",
+        disc2pt: iaaf_formulas.m._400m,
+        pt2disc: iaaf_formulas.m._400m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "110m Hürden",
+        id: "110mH",
+        disc2pt: iaaf_formulas.m._110mH,
+        pt2disc: iaaf_formulas.m._110mH.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {              
+        name: "Diskus",
+        id: "diskus",
+        disc2pt: iaaf_formulas.m.disc,
+        pt2disc: iaaf_formulas.m.disc.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "Stabhochsprung",
+        id: "stab",
+        disc2pt: iaaf_formulas.m.pole,
+        pt2disc: iaaf_formulas.m.pole.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "Speer",
+        id: "speer",
+        disc2pt: iaaf_formulas.m.javelin,
+        pt2disc: iaaf_formulas.m.javelin.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {
+        name: "1500m",
+        id: "1500m",
+        disc2pt: iaaf_formulas.m._1500m,
+        pt2disc: iaaf_formulas.m._1500m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      }
+    ]
   }
 ]
 /* templates */
 
 var template = '\
-<select class="nav" tabindex="1">{{#rechner}}<option value="{{id}}">{{name}}</option>{{/rechner}}</select>{{#rechner}}\
+<select class="nav" tabindex="1">{{#rechner}}\
+<option value="{{id}}">{{name}}</option>{{/rechner}}\
+<option value="">Weitere Mehrkämpfe folgen...</option>\
+</select>{{#rechner}}\
 <div id="{{id}}" class="rechner"></div>{{/rechner}}\
 <small><a href="http://www.kirel.de/mehrkampfrechner">Mehrkampfrechner</a> &copy;2010 Daniel Kirsch</small>';
 var html = $.mustache(template, { rechner: rechner }); 
@@ -423,8 +566,10 @@ $.each(rechner, function (i, r) {
 /*** setup navigation ***/
 $('.rechner:not(:first)', '#kirel-mehrkampf-rechner').hide();
 $('#kirel-mehrkampf-rechner select.nav').change(function () {
-  $('.rechner', '#kirel-mehrkampf-rechner').hide();
-  $('#'+$(this).val(), '#kirel-mehrkampf-rechner').show();
+  if ($(this).val()) {
+    $('.rechner', '#kirel-mehrkampf-rechner').hide();
+    $('#'+$(this).val(), '#kirel-mehrkampf-rechner').show();    
+  }
 })
 
 /*** adding style ***/
