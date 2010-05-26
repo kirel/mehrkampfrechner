@@ -5,7 +5,6 @@
     <script src="jquery-1.4.2.min.js" type="text/javascript"></script>
     <script src="jquery.mustache.js" type="text/javascript"></script>
     <script src="underscore-min.js" type="text/javascript"></script>
-    <script src="mehrkampfrechner.js" type="text/javascript"></script>
     <style>
       #mehrkampfrechner {
         display: table;
@@ -37,42 +36,8 @@
         text-align: right;
       }
     </style>
-    <script type="text/javascript">
-      $(function() {        
-        $("#mehrkampfrechner").mehrkampfrechner([
-            {
-              name: "50m",
-              id: "50m",
-              pt2disc: formulasM['50m_pt2val'],
-              disc2pt: formulasM['50m_val2pt'],
-              parsedisc: parseSeconds,
-              showdisc: showSeconds,
-              unit: "s"
-            },
-            {
-              name: "Weitsprung",
-              id: "weit",
-              pt2disc: formulasM['Weit_pt2val'],
-              disc2pt: formulasM['Weit_val2pt'],
-              parsedisc: parseMeters,
-              showdisc: showMeters,
-              unit: "m"
-            },
-            {              
-              name: "200g Schlagball",
-              id: "200g",
-              pt2disc: formulasM['200g_pt2val'],
-              disc2pt: formulasM['200g_val2pt'],
-              parsedisc: parseMeters,
-              showdisc: showMeters,
-              unit: "m"
-            }      
-          ]);
-        });
-    </script>
-    
   </head>
   <body>
-    <div id="mehrkampfrechner"></div>
+    <script type="text/javascript" src="mehrkampfrechner.js"></script>
   </body>
 </html>

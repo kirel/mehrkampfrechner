@@ -8,6 +8,9 @@
 *   DAMM aller Klassen
 */
 
+
+// business logic here
+
 var parseSeconds = function (s) {
   return parseFloat(s.replace(',','.'));
 }
@@ -22,35 +25,6 @@ var parseMeters = function (m) {
 
 var showMeters = function (num) {
   return Math.ceil(num * Math.pow(10, 2)) / Math.pow(10, 2);
-}
-
-// FIXME ensure Math.floor is correct
-var run_val2pt = function (d,a,c) { return function(m) { return Math.floor((d/m-a)/c); } }
-var run_pt2val = function (d,a,c) { return function(m) { return d/(m*c+a); } }
-var jump_val2pt = function (a,c) { return function(m) { return Math.floor((Math.sqrt(m)-a)/c); } }
-var jump_pt2val = function (a,c) { return function(m) { return Math.pow(m*c+a, 2); } }
-var throw_val2pt = jump_val2pt;
-var throw_pt2val = jump_pt2val;
-
-var formulasM = {
-  "50m_val2pt": run_val2pt(50, 3.79, 0.0069),
-  "50m_pt2val": run_pt2val(50, 3.79, 0.0069),
-  // "60 m": frun(60, 4.20312, 0.00639),
-//  "75 m": [75, 4.1, 0.00664],
-  // "100m": frun(100, 4.34100, 0.00676),
-  // "100mInv": frunInv(100, 4.34100, 0.00676),
-//  "200 m" => [200, 3.60400, 0.00760],
-//  "400 m" => [400, 2.96700, 0.00716],
-//  "800 m" => [800, 2.32500, 0.00644],
-//  "1.000 m" => [1000, 2.15800, 0.00600],
-//  # TODO 1500-5000
-//  "60 m Hürden" => [60, 3.04, 0.0056],
-//  # TODO andere Hürden
-//  "4 x 75 m Staffel" => [300, 4.1, 0.00338],
-  "Weit_val2pt": jump_val2pt(1.15028, 0.00219),
-  "Weit_pt2val": jump_pt2val(1.15028, 0.00219),
-  "200g_val2pt": throw_val2pt(1.936, 0.0124),
-  "200g_pt2val": throw_pt2val(1.936, 0.0124),
 }
 
 var coderange = function(from, to) { return function(code) { return code >= from && code <= to; } }
@@ -105,12 +79,13 @@ gets arguments of form
 }
 */
 
-$.fn.mehrkampfrechner = function(disciplines) {  
+$.fn.mehrkampfrechner = function(name, disciplines) {  
   var rechner = this;
     
   // set up the html
   
   var t = ''
+  t+= '<h2>{{name}}</h2>'
   t+= '<table>'
   t+= '<thead><tr><th>Disziplin</th><th>Leistung</th><th>Einheit</th><th>Punkte</th></tr></thead>'
   t+= '<tfoot><tr><td colspan="3"><label for="total">Gesamt</label></td><td class="total"><input id="total" type="text"/></td></tr></tfoot>'
@@ -122,7 +97,7 @@ $.fn.mehrkampfrechner = function(disciplines) {
   t+= '</tr>'
   t+= '{{/disciplines}}'
   t+= '</table>'
-  var html = $.mustache(t, { "disciplines": disciplines }); 
+  var html = $.mustache(t, { disciplines: disciplines, name: name }); 
   
   $(rechner).html(html);
   
@@ -332,124 +307,136 @@ $.fn.mehrkampfrechner = function(disciplines) {
     $(this).select();
   });
   
-  // update events
-      
-  /* interaction */
-  /*
-  total.keyup(function () {
-    if (total.val()) {
-      total.addClass("set").removeClass("unset setbypts");
-    } else {
-      total.addClass("unset").removeClass("set setbypts");
-    }
-    
-    // FIXME
-    
-    var set = 0.0;
-    $.each(parts, function(index, val) {
-      var pt = $(val.pt);
-      if (pt.hasClass('set') || pt.hasClass('setbydisc')) set += val.parsept(pt.val());                  
-    });
-    var rest = fst.parsetotal(total.val()) - set;
-    var fraction = rest / unset.length;
-    $.each(parts, function(index, val) {
-      var pt = $(val.pt);
-      if (pt.hasClass('unset')) pt.addClass("setbytotal").removeClass("set unset setbydisc");
-      if (pt.hasClass('setbytotal')) {
-        pt.val(val.showpt(fraction));
-      }
-      $(val.disc).trigger('update');
-    });
-    total.attr('disabled', '');
-    
-    // TODO check if only one unset left and disable input on both pt and val
-    
-  });
-  
-  // update total and only total
-  total.bind('update', function (evt) {
-    // check for unset and setbytotal pts
-    var pts = $(_(parts).chain().pluck('pt').value().join(', ')).toArray();
-    var unset = _(pts).filter(function(pt) { return $(pt).hasClass("unset") || $(pt).hasClass("setbytotal"); })
-    // if none of the pts is unset
-    if (unset.length == 0) {
-      console.log('updating total');
-      total.addClass("setbypts").removeClass("set unset");
-      var res = 0.0
-      $.each(parts, function(index, val) {
-        console.log(val.parsept($(val.pt).val()));
-        res += val.parsept($(val.pt).val());
-      });
-      total.val(fst.showtotal(res));
-      total.attr('disabled', 'disabled');
-    }
-    // total is not set manually - clear!
-    else if (!total.hasClass("set")) {
-      total.addClass("unset").removeClass("setbypts set");
-      total.val("");
-      total.attr('disabled', '');
-    }
-    // total is set manually - thus do nothing
-  });
-      
-  $.each(parts, function(index, val) {
-    var pt = $(val.pt);
-    var disc = $(val.disc);
-    pt.addClass("unset");
-    disc.addClass("unset");
-    
-    // pt.change(function (evt) { disc.trigger('update'); });
-    // disc.change(function (evt) { pt.trigger('update'); });
-    
-    pt.keyup(function(evt) {
-      if (evt.keyCode == 9) return;
-      if (pt.val()) {
-        pt.addClass("set").removeClass("unset setbydisc setbytotal");
-      } else {
-        pt.addClass("unset").removeClass("set setbydisc setbytotal");
-      }
-      // update disc
-      disc.trigger('update');
-      total.trigger('update');
-    });            
-    disc.keyup(function (evt) {
-      if (evt.keyCode == 9) return;
-      if (disc.val()) {
-        disc.addClass("set").removeClass("unset setbypt");
-      } else {
-        disc.addClass("unset").removeClass("set setbypt");
-      }
-      // update pt
-      pt.trigger('update');
-      total.trigger('update');
-    });
-
-    // update this field and only this field
-    pt.bind('update', function (evt) {
-      // get the info from disc
-      console.log('updating pt');
-      if (disc.val()) {
-        pt.addClass("setbydisc").removeClass("set unset setbytotal");
-        var compute = _.compose(val.showpt, val.disc2pt, val.parsedisc);
-        pt.val(compute(disc.val()));
-      } else {
-        pt.addClass("unset").removeClass("set setbydisc");
-        pt.val("");
-      }
-    });
-    
-    // update this field and only this field
-    disc.bind('update', function (evt) {
-      console.log('updating disc');
-      if (pt.val()) {
-        disc.addClass("setbypt").removeClass("set unset");
-        var compute = _.compose(val.showdisc, val.pt2disc, val.parsept);
-        disc.val(compute(pt.val()));
-      } else {
-        disc.addClass("unset").removeClass("set setbypt");
-        disc.val("");
-      }
-    });
-  });
-  */
 }
+
+/*** formulas ***/
+
+var run_val2pt = function (d,a,c) { return function(m) { return Math.floor((d/m-a)/c); } }
+var run_pt2val = function (d,a,c) { return function(m) { return d/(m*c+a); } }
+var jump_val2pt = function (a,c) { return function(m) { return Math.floor((Math.sqrt(m)-a)/c); } }
+var jump_pt2val = function (a,c) { return function(m) { return Math.pow(m*c+a, 2); } }
+var throw_val2pt = jump_val2pt;
+var throw_pt2val = jump_pt2val;
+
+var formulas = {
+  m: {
+      "50m_val2pt": run_val2pt(50, 3.79, 0.0069),
+      "50m_pt2val": run_pt2val(50, 3.79, 0.0069),
+      // "60 m": frun(60, 4.20312, 0.00639),
+    //  "75 m": [75, 4.1, 0.00664],
+      // "100m": frun(100, 4.34100, 0.00676),
+      // "100mInv": frunInv(100, 4.34100, 0.00676),
+    //  "200 m" => [200, 3.60400, 0.00760],
+    //  "400 m" => [400, 2.96700, 0.00716],
+    //  "800 m" => [800, 2.32500, 0.00644],
+    //  "1.000 m" => [1000, 2.15800, 0.00600],
+    //  # TODO 1500-5000
+    //  "60 m Hürden" => [60, 3.04, 0.0056],
+    //  # TODO andere Hürden
+    //  "4 x 75 m Staffel" => [300, 4.1, 0.00338],
+      "Weit_val2pt": jump_val2pt(1.15028, 0.00219),
+      "Weit_pt2val": jump_pt2val(1.15028, 0.00219),
+      "hoch_val2pt": jump_val2pt(0.841, 0.0008),
+      "hoch_pt2val": jump_pt2val(0.841, 0.0008),
+      "200g_val2pt": throw_val2pt(1.936, 0.0124),
+      "200g_pt2val": throw_pt2val(1.936, 0.0124),    
+  }
+}
+
+var rechner = [
+  {
+    name: "Dreikampf SB",
+    id: "dsb",
+    disciplines: [
+      {
+        name: "50m",
+        id: "50m-dsb",
+        pt2disc: formulas.m['50m_pt2val'],
+        disc2pt: formulas.m['50m_val2pt'],
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "weit-dsb",
+        pt2disc: formulas.m['Weit_pt2val'],
+        disc2pt: formulas.m['Weit_val2pt'],
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "200g Schlagball",
+        id: "200g-sdb",
+        pt2disc: formulas.m['200g_pt2val'],
+        disc2pt: formulas.m['200g_val2pt'],
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      }
+    ]
+  },
+  {
+    name: "Vierkampf SB",
+    id: "vsb",
+    disciplines: [
+      {
+        name: "50m",
+        id: "50m-vsb",
+        pt2disc: formulas.m['50m_pt2val'],
+        disc2pt: formulas.m['50m_val2pt'],
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "weit-vsb",
+        pt2disc: formulas.m['Weit_pt2val'],
+        disc2pt: formulas.m['Weit_val2pt'],
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {
+        name: "Hochsprung",
+        id: "hoch-vsb",
+        pt2disc: formulas.m['hoch_pt2val'],
+        disc2pt: formulas.m['hoch_val2pt'],
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "200g Schlagball",
+        id: "200g",
+        pt2disc: formulas.m['200g_pt2val'],
+        disc2pt: formulas.m['200g_val2pt'],
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      }
+    ]
+  }
+  
+]
+/* templates */
+
+var template = '<select class="nav">{{#rechner}}<option value="{{id}}">{{name}}</option>{{/rechner}}</select>{{#rechner}}<div id="{{id}}" class="rechner"></div>{{/rechner}}';
+var html = $.mustache(template, { rechner: rechner }); 
+
+document.write('<div id="kirel-mehrkampf-rechner"></div>');
+$('#kirel-mehrkampf-rechner').html(html);
+$.each(rechner, function (i, r) {
+  $('#'+r.id).mehrkampfrechner(r.name, r.disciplines);
+})
+
+/*** setup navigation ***/
+$('.rechner:not(:first)', '#kirel-mehrkampf-rechner').hide();
+$('#kirel-mehrkampf-rechner select.nav').change(function () {
+  $('.rechner', '#kirel-mehrkampf-rechner').hide();
+  $('#'+$(this).val(), '#kirel-mehrkampf-rechner').show();
+})
+
+
