@@ -1,10 +1,37 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Mehrkampfrechner</title>
   </head>
   <body>
-    <h1>Leichtathletik Mehrkampfrechner<h1>
+    <h1>Leichtathletik Mehrkampfrechner</h1>
+    <p>
+      Du kannst den Mehrkampfrechner auf deiner eigenen Seite einbettet indem du folgende Zeile in den HTML-Code deiner Seite einfügst:
+    </p>
+    <pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;mehrkampfrechner.min.js&quot;&gt;&lt;/script&gt;</code></pre>
+    <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+                width="110"
+                height="14"
+                id="clippy" >
+        <param name="movie" value="clippy.swf"/>
+        <param name="allowScriptAccess" value="always" />
+        <param name="quality" value="high" />
+        <param name="scale" value="noscale" />
+        <param NAME="FlashVars" value='text=<script type="text/javascript" src="mehrkampfrechner.min.js"></script>'>
+        <param name="bgcolor" value="#fff">
+        <embed src="clippy.swf"
+               width="110"
+               height="14"
+               name="clippy"
+               quality="high"
+               allowScriptAccess="always"
+               type="application/x-shockwave-flash"
+               pluginspage="http://www.macromedia.com/go/getflashplayer"
+               FlashVars='text=<script type="text/javascript" src="mehrkampfrechner.min.js"></script>'
+               bgcolor="#fff"
+        />
+        </object>
     <script type="text/javascript" src="mehrkampfrechner.min.js"></script>
   </body>
 </html>
