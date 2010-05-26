@@ -81,6 +81,7 @@ gets arguments of form
 
 $.fn.mehrkampfrechner = function(name, disciplines) {  
   var rechner = this;
+  var ns = $(this).attr('id');
     
   // set up the html
   
@@ -88,31 +89,32 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
   t+= '<h2>{{name}}</h2>'
   t+= '<table>'
   t+= '<thead><tr><th>Disziplin</th><th>Leistung</th><th>Einheit</th><th>Punkte</th></tr></thead>'
-  t+= '<tfoot><tr><td colspan="3"><label for="total">Gesamt</label></td><td class="total"><input id="total" type="text"/></td></tr></tfoot>'
+  t+= '<tfoot><tr><td colspan="3"><label for="{{ns}}-total">Gesamt</label></td><td class="total"><input id="{{ns}}-total" type="text"/></td></tr></tfoot>'
   t+= '{{#disciplines}}'
   t+= '<tr>'
-  t+= '<td class="name"><label for="{{id}}">{{name}}</label></td>'
-  t+= '<td class="discipline"><input id="{{id}}" type="text"/></td><td class="unit">{{unit}}</td>'
-  t+= '<td class="pts"><input id="{{id}}pts" type="text"/></td>'
+  t+= '<td class="name"><label for="{{ns}}-{{id}}">{{name}}</label></td>'
+  t+= '<td class="discipline"><input id="{{ns}}-{{id}}" type="text"/></td><td class="unit">{{unit}}</td>'
+  t+= '<td class="pts"><input id="{{ns}}-{{id}}pts" type="text"/></td>'
   t+= '</tr>'
   t+= '{{/disciplines}}'
   t+= '</table>'
-  var html = $.mustache(t, { disciplines: disciplines, name: name }); 
+  var html = $.mustache(t, { disciplines: disciplines, name: name, ns: ns }); 
   
   $(rechner).html(html);
+
+  var total = $('#'+ns+'-total', rechner);
   
   // helper
   var disenable = function () {
-    var total = $('#total', rechner);
     // disenable pts/disc
-    if (total.isSet() && $('td.pts input.unset').size() == 1) {
-      $('td.pts input.unset, td.discipline input.unset').disable();
+    if (total.isSet() && $('td.pts input.unset', rechner).size() == 1) {
+      $('td.pts input.unset, td.discipline input.unset', rechner).disable();
     }
     else {
-      $('td.pts input.unset, td.discipline input.unset').enable();
+      $('td.pts input.unset, td.discipline input.unset', rechner).enable();
     }
     // disenable total
-    if ($('td.pts input.unset').size() == 0) {
+    if ($('td.pts input.unset', rechner).size() == 0) {
       total.disable();
     }
     else {
@@ -125,7 +127,6 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
   var sharequeue; // this is used to distribute the left points over the unset pts
   
   var fillShareQueue = function () {
-    var total = $("#total", rechner);
     var set = $("td.pts input:not(.unset)", rechner);
     var unset = $("td.pts input.unset", rechner);
     // get points already achieved
@@ -164,7 +165,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
   // setup the interaction
   $.each(disciplines, function(index, discipline) {
     // setup disc interaction
-    $('#'+discipline.id, rechner).keyup(function() {
+    $('#'+ns+'-'+discipline.id, rechner).keyup(function() {
       var val = $(this).val();
       if (val === '') {
         $(this).unset();
@@ -172,15 +173,15 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
       else {
         $(this).set();
       }
-      $('#'+discipline.id+'pts', rechner).trigger('update');
-      $('#total', rechner).trigger('update');
+      $('#'+ns+'-'+discipline.id+'pts', rechner).trigger('update');
+      total.trigger('update');
       fillShareQueue();
       $('td.pts input.unset', rechner).trigger('update');
       $('td.discipline input.unset', rechner).trigger('update');
       disenable();
     });
     // setup pts interaction
-    $('#'+discipline.id+'pts', rechner).keyup(function() {
+    $('#'+ns+'-'+discipline.id+'pts', rechner).keyup(function() {
       var val = $(this).val();
       if (val === '') {
         $(this).unset();
@@ -188,8 +189,8 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
       else {
         $(this).set();
       }
-      $('#'+discipline.id, rechner).trigger('update');
-      $('#total', rechner).trigger('update');
+      $('#'+ns+'-'+discipline.id, rechner).trigger('update');
+      total.trigger('update');
       fillShareQueue();
       $('td.pts input.unset', rechner).trigger('update');
       $('td.discipline input.unset', rechner).trigger('update');
@@ -197,7 +198,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
     });    
   });
 
-  $('#total', rechner).keyup(function() {
+  total.keyup(function() {
     var val = $(this).val();
     if (val === '') {
       $(this).unset();
@@ -221,9 +222,8 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
       else
         unset
     */
-    $('#'+discipline.id, rechner).bind('update', function() {
-      var pts = $('#'+discipline.id+'pts', rechner);
-      var total = $('#total', rechner);
+    $('#'+ns+'-'+discipline.id, rechner).bind('update', function() {
+      var pts = $('#'+ns+'-'+discipline.id+'pts', rechner);
       if (pts.isSet()) {
         var calculate = _.compose(discipline.showdisc, discipline.pt2disc, parsept);
         $(this).calculate(calculate(pts.val()));
@@ -246,9 +246,8 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
       else
         unset
     */
-    $('#'+discipline.id+'pts', rechner).bind('update', function() {
-      var disc = $('#'+discipline.id, rechner);
-      var total = $('#total', rechner);
+    $('#'+ns+'-'+discipline.id+'pts', rechner).bind('update', function() {
+      var disc = $('#'+ns+'-'+discipline.id, rechner);
       // FIXME do I need if $(this).isSet() ?
       if (disc.isSet()) {
         var calculate = _.compose(showpt, discipline.disc2pt, discipline.parsedisc);
@@ -276,11 +275,11 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
     else
       do nothing
   */
-  $('#total', rechner).bind('update', function() {
-    if ($('td.pts input.unset').size() == 0) {
+  total.bind('update', function() {
+    if ($('td.pts input.unset', rechner).size() == 0) {
       var calculate = function () {
         var totalpts = 0;
-        $("td.pts input").each(function(index, pts) {
+        $("td.pts input", rechner).each(function(index, pts) {
           totalpts += parsept($(pts).val());
         });
         return showpt(totalpts);
@@ -296,11 +295,11 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
   // now unset everything
   $.each(disciplines, function(index, discipline) {
     // setup disc interaction
-    $('#'+discipline.id, rechner).unset();
+    $('#'+ns+'-'+discipline.id, rechner).unset();
     // setup pts interaction
-    $('#'+discipline.id+'pts', rechner).unset();
+    $('#'+ns+'-'+discipline.id+'pts', rechner).unset();
   });
-  $('#total', rechner).unset();
+  total.unset();
   
   // preselect text
   $('input', rechner).focus(function () {
@@ -350,7 +349,7 @@ var rechner = [
     disciplines: [
       {
         name: "50m",
-        id: "50m-dsb",
+        id: "50m",
         pt2disc: formulas.m['50m_pt2val'],
         disc2pt: formulas.m['50m_val2pt'],
         parsedisc: parseSeconds,
@@ -359,7 +358,7 @@ var rechner = [
       },
       {
         name: "Weitsprung",
-        id: "weit-dsb",
+        id: "weit",
         pt2disc: formulas.m['Weit_pt2val'],
         disc2pt: formulas.m['Weit_val2pt'],
         parsedisc: parseMeters,
@@ -368,7 +367,7 @@ var rechner = [
       },
       {              
         name: "200g Schlagball",
-        id: "200g-sdb",
+        id: "200g",
         pt2disc: formulas.m['200g_pt2val'],
         disc2pt: formulas.m['200g_val2pt'],
         parsedisc: parseMeters,
@@ -383,7 +382,7 @@ var rechner = [
     disciplines: [
       {
         name: "50m",
-        id: "50m-vsb",
+        id: "50m",
         pt2disc: formulas.m['50m_pt2val'],
         disc2pt: formulas.m['50m_val2pt'],
         parsedisc: parseSeconds,
@@ -392,7 +391,7 @@ var rechner = [
       },
       {
         name: "Weitsprung",
-        id: "weit-vsb",
+        id: "weit",
         pt2disc: formulas.m['Weit_pt2val'],
         disc2pt: formulas.m['Weit_val2pt'],
         parsedisc: parseMeters,
@@ -401,7 +400,7 @@ var rechner = [
       },
       {
         name: "Hochsprung",
-        id: "hoch-vsb",
+        id: "hoch",
         pt2disc: formulas.m['hoch_pt2val'],
         disc2pt: formulas.m['hoch_val2pt'],
         parsedisc: parseMeters,
@@ -439,4 +438,34 @@ $('#kirel-mehrkampf-rechner select.nav').change(function () {
   $('#'+$(this).val(), '#kirel-mehrkampf-rechner').show();
 })
 
+/*** adding style ***/
+s = '\
+<style>\
+  #mehrkampfrechner {\
+    display: table;\
+  }\
+  div.discpts {\
+    display: table-row;\
+  }\
+  div.discipline {\
+    display: table-cell;\
+  }\
+  div.pts {\
+    display: table-cell;\
+  }\
+  input.set {\
+    color: black;\
+  }\
+  input.calculated {\
+    color: green;\
+  }\
+  input.unset {\
+    color: gray;\
+  }\
+  td.discipline input {\
+    text-align: right;\
+  }\
+  </style>\
+';
+$('head').prepend(s);
 
