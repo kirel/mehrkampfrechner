@@ -10,6 +10,24 @@ var showSeconds = function (num) {
   return Math.floor(num * Math.pow(10, 2)) / Math.pow(10, 2);
 }
 
+var parseMinutes = function (s) {
+  return _(s.replace(',','.').split(':')).reduce(0, function(res, part) {
+    return (res * 60) + parseFloat(part);
+  });
+}
+
+var showMinutes = function(secs) {
+  var s = secs * 100 % 6000 / 100;
+  if (s < 10) {
+    s = '0' + showSeconds(s);
+  }
+  else {
+    s = showSeconds(s);    
+  }
+  var m = Math.floor(secs/60);
+  return [m,s].join(':');
+}
+
 var parseMeters = function (m) {
   return parseFloat(m.replace(',','.'));
 }
@@ -539,9 +557,9 @@ var rechner = [
         id: "1500m",
         disc2pt: iaaf_formulas.m._1500m,
         pt2disc: iaaf_formulas.m._1500m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
+        parsedisc: parseMinutes,
+        showdisc: showMinutes,
+        unit: "m:s"
       }
     ]
   }
