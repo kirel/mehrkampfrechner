@@ -331,7 +331,7 @@ var dlv_formulas = {
       _75m: dlv_run(75, 4.1, 0.00664),
       _long: dlv_jump(1.15028, 0.00219),
       _high: dlv_jump(0.841, 0.0008),
-      _200g: dlv_throw(1.936, 0.0124),
+      _200g: dlv_throw(1.936, 0.0124)
   }
 }
 
