@@ -1,5 +1,5 @@
 /* Javascript Mehrkampfrechner (c)2010 Daniel Kirsch */
-(function($) {  
+(function($, _) {  
 // business logic here
 
 var parseSeconds = function (s) {
@@ -313,40 +313,29 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
   
 }
 
-/*** formulas ***/
-
-var run_val2pt = function (d,a,c) { return function(m) { return Math.floor((d/m-a)/c); } }
-var run_pt2val = function (d,a,c) { return function(m) { return d/(m*c+a); } }
-var jump_val2pt = function (a,c) { return function(m) { return Math.floor((Math.sqrt(m)-a)/c); } }
-var jump_pt2val = function (a,c) { return function(m) { return Math.pow(m*c+a, 2); } }
-var throw_val2pt = jump_val2pt;
-var throw_pt2val = jump_pt2val;
-
-var formulas = {
+/*** dlv formulas ***/
+var dlv_run = function (d,a,c) {
+  var fn = function(m) { return Math.floor((d/m-a)/c); }
+  fn.inverse = function(pt) { return d/(pt*c+a); }
+  return fn;
+}
+var dlv_jump = function (a,c) {
+  var fn = function(m) { return Math.floor((Math.sqrt(m)-a)/c); }
+  fn.inverse = function(m) { return Math.pow(m*c+a, 2); }
+  return fn;
+}
+var dlv_throw = dlv_jump;
+var dlv_formulas = {
   m: {
-      "50m_val2pt": run_val2pt(50, 3.79, 0.0069),
-      "50m_pt2val": run_pt2val(50, 3.79, 0.0069),
-      // "60 m": frun(60, 4.20312, 0.00639),
-    //  "75 m": [75, 4.1, 0.00664],
-      // "100m": frun(100, 4.34100, 0.00676),
-      // "100mInv": frunInv(100, 4.34100, 0.00676),
-    //  "200 m" => [200, 3.60400, 0.00760],
-    //  "400 m" => [400, 2.96700, 0.00716],
-    //  "800 m" => [800, 2.32500, 0.00644],
-    //  "1.000 m" => [1000, 2.15800, 0.00600],
-    //  # TODO 1500-5000
-    //  "60 m Hürden" => [60, 3.04, 0.0056],
-    //  # TODO andere Hürden
-    //  "4 x 75 m Staffel" => [300, 4.1, 0.00338],
-      "Weit_val2pt": jump_val2pt(1.15028, 0.00219),
-      "Weit_pt2val": jump_pt2val(1.15028, 0.00219),
-      "hoch_val2pt": jump_val2pt(0.841, 0.0008),
-      "hoch_pt2val": jump_pt2val(0.841, 0.0008),
-      "200g_val2pt": throw_val2pt(1.936, 0.0124),
-      "200g_pt2val": throw_pt2val(1.936, 0.0124) 
+      _50m: dlv_run(50, 3.79, 0.0069),
+      _75m: dlv_run(75, 4.1, 0.00664),
+      _long: dlv_jump(1.15028, 0.00219),
+      _high: dlv_jump(0.841, 0.0008),
+      _200g: dlv_throw(1.936, 0.0124),
   }
 }
 
+/*** iaaf formulas ***/
 var iaaf_run = function (a,b,c) {
   var fn = function (m) { return Math.floor(a * Math.pow(b-m, c)); };
   fn.inverse = function (pt) { return b - Math.pow(pt/a,1/c); };
@@ -397,10 +386,10 @@ var rechner = [
     id: "dsb",
     disciplines: [
       {
-        name: "50m",
-        id: "50m",
-        pt2disc: formulas.m['50m_pt2val'],
-        disc2pt: formulas.m['50m_val2pt'],
+        name: "75m",
+        id: "75m",
+        disc2pt: dlv_formulas.m._75m,
+        pt2disc: dlv_formulas.m._75m.inverse,
         parsedisc: parseSeconds,
         showdisc: showSeconds,
         unit: "s"
@@ -408,8 +397,8 @@ var rechner = [
       {
         name: "Weitsprung",
         id: "weit",
-        pt2disc: formulas.m['Weit_pt2val'],
-        disc2pt: formulas.m['Weit_val2pt'],
+        disc2pt: dlv_formulas.m._long,
+        pt2disc: dlv_formulas.m._long.inverse,
         parsedisc: parseMeters,
         showdisc: showMeters,
         unit: "m"
@@ -417,8 +406,8 @@ var rechner = [
       {              
         name: "200g Schlagball",
         id: "200g",
-        pt2disc: formulas.m['200g_pt2val'],
-        disc2pt: formulas.m['200g_val2pt'],
+        disc2pt: dlv_formulas.m._200g,
+        pt2disc: dlv_formulas.m._200g.inverse,
         parsedisc: parseMeters,
         showdisc: showMeters,
         unit: "m"
@@ -430,10 +419,10 @@ var rechner = [
     id: "vsb",
     disciplines: [
       {
-        name: "50m",
-        id: "50m",
-        pt2disc: formulas.m['50m_pt2val'],
-        disc2pt: formulas.m['50m_val2pt'],
+        name: "75m",
+        id: "75m",
+        disc2pt: dlv_formulas.m._75m,
+        pt2disc: dlv_formulas.m._75m.inverse,
         parsedisc: parseSeconds,
         showdisc: showSeconds,
         unit: "s"
@@ -441,8 +430,8 @@ var rechner = [
       {
         name: "Weitsprung",
         id: "weit",
-        pt2disc: formulas.m['Weit_pt2val'],
-        disc2pt: formulas.m['Weit_val2pt'],
+        disc2pt: dlv_formulas.m._long,
+        pt2disc: dlv_formulas.m._long.inverse,
         parsedisc: parseMeters,
         showdisc: showMeters,
         unit: "m"
@@ -450,8 +439,8 @@ var rechner = [
       {
         name: "Hochsprung",
         id: "hoch",
-        pt2disc: formulas.m['hoch_pt2val'],
-        disc2pt: formulas.m['hoch_val2pt'],
+        disc2pt: dlv_formulas.m._high,
+        pt2disc: dlv_formulas.m._high.inverse,
         parsedisc: parseMeters,
         showdisc: showMeters,
         unit: "m"
@@ -459,8 +448,8 @@ var rechner = [
       {              
         name: "200g Schlagball",
         id: "200g",
-        pt2disc: formulas.m['200g_pt2val'],
-        disc2pt: formulas.m['200g_val2pt'],
+        disc2pt: dlv_formulas.m._200g,
+        pt2disc: dlv_formulas.m._200g.inverse,
         parsedisc: parseMeters,
         showdisc: showMeters,
         unit: "m"
@@ -621,7 +610,7 @@ s = '\
 ';
 $('head').prepend(s);
 
-})(jQuery);
+})($.noConflict(), _.noConflict());
 
 /*** sneak in ga ***/
 var _gaq = _gaq || [];
