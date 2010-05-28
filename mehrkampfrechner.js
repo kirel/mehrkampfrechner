@@ -107,14 +107,14 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
   t+= '</tr>'
   t+= '{{/disciplines}}'
   t+= '</table>'
-  t+= '<small><a class="getlink" href="#{{id}}">Link</a> zum Mehrkampf</small>'
+  t+= '<small><a class="getcalculatorlink" href="#{{id}}">Link</a> zum Mehrkampf</small>'
   var html = $.mustache(t, { disciplines: disciplines, name: name, ns: ns }); 
   
   $(rechner).html(html);
 
   /*** link functionality ***/
   
-  var getlink = $('.getlink', rechner).bind('update', function() {
+  var getcaluclatorlink = $('.getcalculatorlink', rechner).bind('update', function() {
     var sero = {};
     $('input.set', rechner).each(function (_, el) {
       sero[$(el).attr('id')] = $(el).val();
@@ -196,7 +196,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
       fillShareQueue();
       $('td.pts input.unset', rechner).trigger('update');
       $('td.discipline input.unset', rechner).trigger('update');
-      getlink.trigger('update');
+      getcalculatorlink.trigger('update');
       disenable();
     });
     // setup pts interaction
@@ -214,7 +214,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
       fillShareQueue();
       $('td.pts input.unset', rechner).trigger('update');
       $('td.discipline input.unset', rechner).trigger('update');
-      getlink.trigger('update');
+      getcalculatorlink.trigger('update');
       disenable();
     });    
   });
@@ -231,7 +231,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
     fillShareQueue();
     $('td.pts input.unset', rechner).trigger('update');
     $('td.discipline input.unset', rechner).trigger('update');
-    getlink.trigger('update');
+    getcalculatorlink.trigger('update');
     disenable();
   });    
   
@@ -658,7 +658,7 @@ if (hash()) {
 jQuery.each(qso(), function (id, val) {
   $('#kirel-mehrkampf-rechner #'+id).val(val).keyup();
 })
-$('#kirel-mehrkampf-rechner .getlink').trigger('update');
+$('#kirel-mehrkampf-rechner .getcalculatorlink').trigger('update');
 
 })($.noConflict(), _.noConflict());
 
