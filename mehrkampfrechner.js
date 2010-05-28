@@ -114,12 +114,17 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
 
   /*** link functionality ***/
   
-  var getcaluclatorlink = $('.getcalculatorlink', rechner).bind('update', function() {
+  var getcalculatorlink = $('.getcalculatorlink', rechner).bind('update', function() {
     var sero = {};
     $('input.set', rechner).each(function (_, el) {
       sero[$(el).attr('id')] = $(el).val();
     });
-    $(this).attr('href', '?'+$.param(sero)+'#'+ns);
+    if ($.isEmptyObject(sero)) {      
+      $(this).attr('href', '#'+ns);
+    }
+    else {
+      $(this).attr('href', '?'+$.param(sero)+'#'+ns);
+    }
   });// .click(function() {
     // TODO
   //     return false;
