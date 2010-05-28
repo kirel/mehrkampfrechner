@@ -1,5 +1,5 @@
 /* Javascript Mehrkampfrechner (c)2010 Daniel Kirsch */
-(function($, _) {  
+(function($, _) {
 // business logic here
 
 var parseSeconds = function (s) {
@@ -107,10 +107,25 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
   t+= '</tr>'
   t+= '{{/disciplines}}'
   t+= '</table>'
+  t+= '<small><a class="getlink" href="#{{id}}">Link</a> zum Mehrkampf</small>'
   var html = $.mustache(t, { disciplines: disciplines, name: name, ns: ns }); 
   
   $(rechner).html(html);
 
+  /*** link functionality ***/
+  
+  var getlink = $('.getlink', rechner).bind('update', function() {
+    var sero = {};
+    $('input.set', rechner).each(function (_, el) {
+      sero[$(el).attr('id')] = $(el).val();
+    });
+    $(this).attr('href', '?'+$.param(sero)+'#'+ns);
+  });// .click(function() {
+    // TODO
+  //     return false;
+  //   });
+
+  // total
   var total = $('#'+ns+'-total', rechner);
   
   // helper
@@ -181,6 +196,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
       fillShareQueue();
       $('td.pts input.unset', rechner).trigger('update');
       $('td.discipline input.unset', rechner).trigger('update');
+      getlink.trigger('update');
       disenable();
     });
     // setup pts interaction
@@ -198,6 +214,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
       fillShareQueue();
       $('td.pts input.unset', rechner).trigger('update');
       $('td.discipline input.unset', rechner).trigger('update');
+      getlink.trigger('update');
       disenable();
     });    
   });
@@ -214,6 +231,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
     fillShareQueue();
     $('td.pts input.unset', rechner).trigger('update');
     $('td.discipline input.unset', rechner).trigger('update');
+    getlink.trigger('update');
     disenable();
   });    
   
@@ -570,15 +588,6 @@ $.each(rechner, function (i, r) {
   $('#'+r.id).mehrkampfrechner(r.name, r.disciplines);
 })
 
-/*** setup navigation ***/
-$('.rechner:not(:first)', '#kirel-mehrkampf-rechner').hide();
-$('#kirel-mehrkampf-rechner select.nav').change(function () {
-  if ($(this).val()) {
-    $('.rechner', '#kirel-mehrkampf-rechner').hide();
-    $('#'+$(this).val(), '#kirel-mehrkampf-rechner').show();    
-  }
-})
-
 /*** adding style ***/
 s = '\
 <style>\
@@ -609,6 +618,47 @@ s = '\
   </style>\
 ';
 $('head').prepend(s);
+
+/*** setup navigation ***/
+$('.rechner:not(:first)', '#kirel-mehrkampf-rechner').hide();
+var go = function (id) {
+  $('.rechner', '#kirel-mehrkampf-rechner').hide();
+  $(id, '#kirel-mehrkampf-rechner').show();    
+}
+$('#kirel-mehrkampf-rechner select.nav').change(function() {
+  if ($(this).val()) {
+    go($('#'+$(this).val()));
+  }
+});
+
+// query string as object
+var qso = function () {
+  var qs = window.location.href.split('?')[1];
+  if (qs) {
+    return _(qs.split('#')[0].split('&')).reduce({}, function(qso, slice) {
+      var pair = slice.split('=');
+      qso[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+      return qso;
+    });
+  }
+  else {
+    return {};
+  }
+}
+// get the hash
+var hash = function() {
+  return window.location.hash.split('#')[1];
+}
+// open the right calculator
+if (hash()) {
+  $('#kirel-mehrkampf-rechner select.nav').val(hash());
+  go('#'+hash());
+}
+// fill fields
+jQuery.each(qso(), function (id, val) {
+  $('#kirel-mehrkampf-rechner #'+id).val(val).keyup();
+})
+$('#kirel-mehrkampf-rechner .getlink').trigger('update');
 
 })($.noConflict(), _.noConflict());
 
