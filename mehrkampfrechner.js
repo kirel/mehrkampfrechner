@@ -114,16 +114,18 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
 
   /*** link functionality ***/
   
+  var URL = 'http://www.kirel.de/mehrkampfrechner/';
+  
   var getcalculatorlink = $('.getcalculatorlink', rechner).bind('update', function() {
     var sero = {};
     $('input.set', rechner).each(function (_, el) {
       sero[$(el).attr('id')] = $(el).val();
     });
     if ($.isEmptyObject(sero)) {      
-      $(this).attr('href', '#'+ns);
+      $(this).attr('href', URL+'#'+ns);
     }
     else {
-      $(this).attr('href', '?'+$.param(sero)+'#'+ns);
+      $(this).attr('href', URL+'?'+$.param(sero)+'#'+ns);
     }
   });// .click(function() {
     // TODO
