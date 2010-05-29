@@ -510,7 +510,7 @@ var rechner = [
     ]
   },
   {
-    name: "Blockwettkampf Sprint/Sprung SA",
+    name: "Blockwettkampf Sprint SA",
     id: "bspspsa",
     disciplines: [
       {
