@@ -390,7 +390,7 @@ var iaaf_formulas = {
     _3000m: iaaf_run(0.0105, 1005, 1.85),
     _5000m: iaaf_run(0.00419, 1680, 1.85),
     _1000m: iaaf_run(0.000415, 4245, 1.9),
-    _3000mHi: iaaf_run(0.00511, 1155, 1.9),
+    _3000mSt: iaaf_run(0.00511, 1155, 1.9),
     _60mH: iaaf_run(20.5173, 15.5, 1.92),
     _110mH: iaaf_run(5.74325, 28.5, 1.92),
     _200mH: iaaf_run(3.495, 45.5, 1.81),
@@ -403,6 +403,31 @@ var iaaf_formulas = {
     _disc: iaaf_throw(12.91, 4, 1.10),
     _javelin: iaaf_throw(10.14,7, 1.08),
     _hammer: iaaf_throw(13.0449, 7, 1.05)
+  },
+  w: {
+    _60m: iaaf_run(46.0849, 13, 1.81),
+    _100m: iaaf_run(17.857, 21, 1.81),
+    _200m: iaaf_run(4.99087, 42.5, 1.81),
+    _400m: iaaf_run(1.34285, 91.7, 1.81),
+    _800m: iaaf_run(0.11193, 254, 1.88),
+    _1000m: iaaf_run(0.07068, 337, 1.88),
+    _1500m: iaaf_run(0.02883, 535, 1.88),
+    _3000m: iaaf_run(0.00683, 1150, 1.88),
+    _5000m: iaaf_run(0.00272, 1920, 1.88),
+    _10000m: iaaf_run(0.000396, 4920, 1.88),
+    _3000mSt: iaaf_run(0.00408, 1320, 1.9),
+    _60mH: iaaf_run(20.0479, 17, 1.835),
+    _100mH: iaaf_run(9.23076, 26.7, 1.835),
+    _200mH: iaaf_run(2.975, 52, 1.81),
+    _400mH: iaaf_run(0.99674, 103, 1.81),
+    _high: iaaf_jump(1.84523, 75, 1.348),
+    _pole: iaaf_jump(0.44125, 100, 1.35),
+    _long: iaaf_jump(0.188807, 210, 1.41),
+    _triple: iaaf_jump(0.08559, 600, 1.41),
+    _shot: iaaf_throw(56.0211, 1.5, 1.05),
+    _disc: iaaf_throw(12.3311, 3, 1.10),
+    _javelin: iaaf_throw(15.9803, 3.8, 1.04),
+    _hammer: iaaf_throw(17.5458, 6, 1.05)    
   }
 };
 
@@ -534,8 +559,146 @@ var rechner = [
     ]
   },
   {
-    name: "Zehnkampf MHK",
-    id: "zkmhk",
+    name: "Siebenkampf WJB",
+    id: "skfwjb",
+    disciplines: [
+      {
+        name: "100m Hürden",
+        id: "100mH",
+        disc2pt: iaaf_formulas.w._100mH,
+        pt2disc: iaaf_formulas.w._100mH.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {              
+        name: "Hochsprung",
+        id: "hoch",
+        disc2pt: iaaf_formulas.w._high,
+        pt2disc: iaaf_formulas.w._high.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "Kugelstoßen",
+        id: "kugel",
+        disc2pt: iaaf_formulas.w._shot,
+        pt2disc: iaaf_formulas.w._shot.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {
+        name: "100m",
+        id: "100m",
+        disc2pt: iaaf_formulas.w._100m,
+        pt2disc: iaaf_formulas.w._100m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "weit",
+        disc2pt: iaaf_formulas.w._long,
+        pt2disc: iaaf_formulas.w._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "Speer",
+        id: "speer",
+        disc2pt: iaaf_formulas.w._javelin,
+        pt2disc: iaaf_formulas.w._javelin.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {
+        name: "800m",
+        id: "800m",
+        disc2pt: iaaf_formulas.w._800m,
+        pt2disc: iaaf_formulas.w._800m.inverse,
+        parsedisc: parseMinutes,
+        showdisc: showMinutes,
+        unit: "m:s"
+      }
+    ]
+  },
+  {
+    name: "Siebenkampf F/WJA",
+    id: "skfwja",
+    disciplines: [
+      {
+        name: "100m Hürden",
+        id: "100mH",
+        disc2pt: iaaf_formulas.w._100mH,
+        pt2disc: iaaf_formulas.w._100mH.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {              
+        name: "Hochsprung",
+        id: "hoch",
+        disc2pt: iaaf_formulas.w._high,
+        pt2disc: iaaf_formulas.w._high.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "Kugelstoßen",
+        id: "kugel",
+        disc2pt: iaaf_formulas.w._shot,
+        pt2disc: iaaf_formulas.w._shot.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {
+        name: "200m",
+        id: "200m",
+        disc2pt: iaaf_formulas.w._200m,
+        pt2disc: iaaf_formulas.w._200m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "weit",
+        disc2pt: iaaf_formulas.w._long,
+        pt2disc: iaaf_formulas.w._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "Speer",
+        id: "speer",
+        disc2pt: iaaf_formulas.w._javelin,
+        pt2disc: iaaf_formulas.w._javelin.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {
+        name: "800m",
+        id: "800m",
+        disc2pt: iaaf_formulas.w._800m,
+        pt2disc: iaaf_formulas.w._800m.inverse,
+        parsedisc: parseMinutes,
+        showdisc: showMinutes,
+        unit: "m:s"
+      }
+    ]
+  },
+  {
+    name: "Zehnkampf M/MJ",
+    id: "zk",
     disciplines: [
       {
         name: "100m",
