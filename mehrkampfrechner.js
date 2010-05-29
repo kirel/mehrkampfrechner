@@ -350,11 +350,14 @@ var dlv_jump = function (a,c) {
 var dlv_throw = dlv_jump;
 var dlv_formulas = {
   m: {
-      _50m: dlv_run(50, 3.79, 0.0069),
-      _75m: dlv_run(75, 4.1, 0.00664),
-      _long: dlv_jump(1.15028, 0.00219),
-      _high: dlv_jump(0.841, 0.0008),
-      _200g: dlv_throw(1.936, 0.0124)
+    _50m: dlv_run(50, 3.79, 0.0069),
+    _75m: dlv_run(75, 4.1, 0.00664),
+    _100m: dlv_run(100, 4.34100, 0.00676),
+    _80mH: dlv_run(80, 1.40833, 0.00943),
+    _long: dlv_jump(1.15028, 0.00219),
+    _high: dlv_jump(0.841, 0.0008),
+    _200g: dlv_throw(1.936, 0.0124),
+    _javelin: dlv_throw(0.35000, 0.01052)
   }
 }
 
@@ -473,6 +476,57 @@ var rechner = [
         id: "200g",
         disc2pt: dlv_formulas.m._200g,
         pt2disc: dlv_formulas.m._200g.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      }
+    ]
+  },
+  {
+    name: "Blockwettkampf Sprint/Sprung SA",
+    id: "bspspsa",
+    disciplines: [
+      {
+        name: "100m",
+        id: "100m",
+        disc2pt: dlv_formulas.m._100m,
+        pt2disc: dlv_formulas.m._100m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "80m Hürden",
+        id: "80mH",
+        disc2pt: dlv_formulas.m._80mH,
+        pt2disc: dlv_formulas.m._80mH.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "long",
+        disc2pt: dlv_formulas.m._long,
+        pt2disc: dlv_formulas.m._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {
+        name: "Hochsprung",
+        id: "high",
+        disc2pt: dlv_formulas.m._high,
+        pt2disc: dlv_formulas.m._high.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "Speer",
+        id: "javelin",
+        disc2pt: dlv_formulas.m._javelin,
+        pt2disc: dlv_formulas.m._javelin.inverse,
         parsedisc: parseMeters,
         showdisc: showMeters,
         unit: "m"
