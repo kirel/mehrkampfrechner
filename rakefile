@@ -1,8 +1,14 @@
 task :default => :package
 
+desc "compile"
+task :compile do
+  system 'java -jar compiler.jar --js=underscore-min.js --js=jquery-1.4.2.min.js --js=jquery.mustache.js --js=mehrkampfrechner.js --js_output_file=mehrkampfrechner.min.js'
+end
+
+
 desc "package"
-task :package do
-  system 'java -jar compiler.jar --js=underscore-min.js --js=jquery-1.4.2.min.js --js=jquery.mustache.js --js=mehrkampfrechner.js --js_output_file=mehrkampfrechner.min.js && git add mehrkampfrechner.min.js && git commit -m repackaged'
+task :package => :compile do
+  system 'git add mehrkampfrechner.min.js && git commit -m repackaged'
 end
 
 desc 'release'
