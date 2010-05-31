@@ -45,10 +45,10 @@ var showMeters = function (num) {
 }
 
 var coderange = function(from, to) { return function(code) { return (code >= from && code <= to); } }
-var tab = coderange(9,9)
-var atoz = coderange(65,90);
-var digit = coderange(48,57);
-var arrows = coderange(37,40); // left up right down
+var tab = coderange(9, 9)
+var atoz = coderange(65, 90);
+var digit = coderange(48, 57);
+var arrows = coderange(37, 40); // left up right down
 
 /* helper functions */
 $.fn.extend({
@@ -400,13 +400,58 @@ var dlv_throw = dlv_jump;
 var dlv_formulas = {
   m: {
     _50m: dlv_run(50, 3.79, 0.0069, 0.24),
+    _60m: dlv_run(60, 4.20312, 0.00639, 0.24),
     _75m: dlv_run(75, 4.1, 0.00664, 0.24),
     _100m: dlv_run(100, 4.34100, 0.00676, 0.24),
+    _200m: dlv_run(200, 3.60400, 0.00760 , 0.24),
+    _400m: dlv_run(400, 2.967, 0.00716, 0.14),
+    _800m: dlv_run(800, 2.32500, 0.00644, 0),
+    _1000m: dlv_run(1000, 2.15800, 0.00600, 0),
+    _1500m: dlv_run(1500, 1.91220, 0.00613, 0),
+    _2000m: dlv_run(2000, 1.78400, 0.00600, 0),
+    _3000m: dlv_run(3000, 1.70000, 0.00580, 0),
+    _5000m: dlv_run(5000, 1.52500, 0.00560, 0),
+    _60mH: dlv_run(60, 3.04000, 0.00560, 0.24),
     _80mH: dlv_run(80, 1.40833, 0.00943, 0.24),
-    _long: dlv_jump(1.15028, 0.00219),
+    _110mH: dlv_run(110, 1.14220, 0.00918, 0.24),
+    _400mH: dlv_run(400, 1.61943, 0.00810, 0.14),
+    _4x50m: dlv_run(200, 3.79000, 0.00345, 0.24),
+    _4x75m: dlv_run(300, 4.10000, 0.00332, 0.14),
+    _4x100m: dlv_run(400, 4.34100, 0.00338, 0.14),
     _high: dlv_jump(0.841, 0.0008),
+    _pole: dlv_jump(0.64800, 0.00210),
+    _long: dlv_jump(1.15028, 0.00219),
+    _triple: dlv_jump(2.19239, 0.00232),
+    _shot: dlv_throw(1.42500, 0.00370),
+    _disc: dlv_throw(1.40000, 0.00800),
+    _hammer: dlv_throw(-2.17028, 0.01392),
+    _javelin: dlv_throw(0.35000, 0.01052),
     _200g: dlv_throw(1.936, 0.0124),
-    _javelin: dlv_throw(0.35000, 0.01052)
+    _80g: dlv_throw(2.80000, 0.01100)
+  },
+  w: {
+    _50m: dlv_run(50, 3.64800, 0.00660, 0.24),
+    _60m: dlv_run(60, 3.65071, 0.00673, 0.24),
+    _75m: dlv_run(75, 3.99800, 0.00660, 0.24),
+    _100m: dlv_run(100, 4.00620, 0.00656, 0.24),
+    _200m: dlv_run(200, 3.78900, 0.00734, 0.24),
+    _400m: dlv_run(400, 2.81000, 0.00716, 0.14),
+    _800m: dlv_run(800, 2.02320, 0.00647, 0),
+    _2000m: dlv_run(2000, 1.80000, 0.00540, 0),
+    _3000m: dlv_run(3000, 1.75000, 0.00500, 0),
+    _60mH: dlv_run(60, 2.12020, 0.00680, 0.24),
+    _80mH: dlv_run(80, 2.01000, 0.00780, 0.24),
+    _100mH: dlv_run(100, 2.01500, 0.00810, 0.24),
+    _4x50m: dlv_run(200, 3.64800, 0.00330, 0.24),
+    _4x75m: dlv_run(300, 3.99800, 0.00330, 0.14),
+    _4x100m: dlv_run(400, 4.00620, 0.00328, 0.14),
+    _high: dlv_jump(0.88070, 0.00068),
+    _long: dlv_jump(1.09350, 0.00208),
+    _shot: dlv_throw(1.27900, 0.00398),
+    _disc: dlv_throw(1.05150, 0.00890),
+    _javelin: dlv_throw(0.42200, 0.01012),
+    _200g: dlv_throw(1.41490, 0.01039),
+    _80g: dlv_throw(2.02320, 0.00874)
   }
 }
 
@@ -464,7 +509,7 @@ var iaaf_formulas = {
     _triple: iaaf_jump(0.06533, 640, 1.4),
     _shot: iaaf_throw(51.39, 1.5, 1.05),
     _disc: iaaf_throw(12.91, 4, 1.10),
-    _javelin: iaaf_throw(10.14,7, 1.08),
+    _javelin: iaaf_throw(10.14, 7, 1.08),
     _hammer: iaaf_throw(13.0449, 7, 1.05)
   },
   w: {
