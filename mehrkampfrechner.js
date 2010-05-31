@@ -83,19 +83,6 @@ $.fn.extend({
   }
 });
 
-/*
-gets arguments of form
-{
-  name: "50m",
-  id: "50m",
-  pt2disc: formulasM['50m_pt2val'],
-  disc2pt: formulasM['50m_val2pt'],
-  parsedisc: parseFloat,
-  showdisc: _.identity,
-  unit: "s"
-}
-*/
-
 $.fn.mehrkampfrechner = function(name, disciplines) {  
   var rechner = this;
   var ns = $(this).attr('id');
@@ -397,64 +384,6 @@ var dlv_jump = function (a,c) {
   return fn;
 }
 var dlv_throw = dlv_jump;
-var dlv_formulas = {
-  m: {
-    _50m: dlv_run(50, 3.79, 0.0069, 0.24),
-    _60m: dlv_run(60, 4.20312, 0.00639, 0.24),
-    _75m: dlv_run(75, 4.1, 0.00664, 0.24),
-    _100m: dlv_run(100, 4.34100, 0.00676, 0.24),
-    _200m: dlv_run(200, 3.60400, 0.00760 , 0.24),
-    _400m: dlv_run(400, 2.967, 0.00716, 0.14),
-    _800m: dlv_run(800, 2.32500, 0.00644, 0),
-    _1000m: dlv_run(1000, 2.15800, 0.00600, 0),
-    _1500m: dlv_run(1500, 1.91220, 0.00613, 0),
-    _2000m: dlv_run(2000, 1.78400, 0.00600, 0),
-    _3000m: dlv_run(3000, 1.70000, 0.00580, 0),
-    _5000m: dlv_run(5000, 1.52500, 0.00560, 0),
-    _60mH: dlv_run(60, 3.04000, 0.00560, 0.24),
-    _80mH: dlv_run(80, 1.40833, 0.00943, 0.24),
-    _110mH: dlv_run(110, 1.14220, 0.00918, 0.24),
-    _400mH: dlv_run(400, 1.61943, 0.00810, 0.14),
-    _4x50m: dlv_run(200, 3.79000, 0.00345, 0.24),
-    _4x75m: dlv_run(300, 4.10000, 0.00332, 0.14),
-    _4x100m: dlv_run(400, 4.34100, 0.00338, 0.14),
-    _high: dlv_jump(0.841, 0.0008),
-    _pole: dlv_jump(0.64800, 0.00210),
-    _long: dlv_jump(1.15028, 0.00219),
-    _triple: dlv_jump(2.19239, 0.00232),
-    _shot: dlv_throw(1.42500, 0.00370),
-    _disc: dlv_throw(1.40000, 0.00800),
-    _hammer: dlv_throw(-2.17028, 0.01392),
-    _javelin: dlv_throw(0.35000, 0.01052),
-    _200g: dlv_throw(1.936, 0.0124),
-    _80g: dlv_throw(2.80000, 0.01100)
-  },
-  w: {
-    _50m: dlv_run(50, 3.64800, 0.00660, 0.24),
-    _60m: dlv_run(60, 3.65071, 0.00673, 0.24),
-    _75m: dlv_run(75, 3.99800, 0.00660, 0.24),
-    _100m: dlv_run(100, 4.00620, 0.00656, 0.24),
-    _200m: dlv_run(200, 3.78900, 0.00734, 0.24),
-    _400m: dlv_run(400, 2.81000, 0.00716, 0.14),
-    _800m: dlv_run(800, 2.02320, 0.00647, 0),
-    _2000m: dlv_run(2000, 1.80000, 0.00540, 0),
-    _3000m: dlv_run(3000, 1.75000, 0.00500, 0),
-    _60mH: dlv_run(60, 2.12020, 0.00680, 0.24),
-    _80mH: dlv_run(80, 2.01000, 0.00780, 0.24),
-    _100mH: dlv_run(100, 2.01500, 0.00810, 0.24),
-    _4x50m: dlv_run(200, 3.64800, 0.00330, 0.24),
-    _4x75m: dlv_run(300, 3.99800, 0.00330, 0.14),
-    _4x100m: dlv_run(400, 4.00620, 0.00328, 0.14),
-    _high: dlv_jump(0.88070, 0.00068),
-    _long: dlv_jump(1.09350, 0.00208),
-    _shot: dlv_throw(1.27900, 0.00398),
-    _disc: dlv_throw(1.05150, 0.00890),
-    _javelin: dlv_throw(0.42200, 0.01012),
-    _200g: dlv_throw(1.41490, 0.01039),
-    _80g: dlv_throw(2.02320, 0.00874)
-  }
-}
-
 /*** iaaf formulas ***/
 var iaaf_run = function (a,b,c,penalty) {
   var fn = function (m, penalize) {
@@ -485,795 +414,558 @@ var iaaf_jump = function (a,b,c) {
   fn.inverse = function (m) { return iaaf_throw(a,b,c).inverse(m)/100; }
   return fn;
 }
-var iaaf_formulas = {
-  m: {
-    _60m: iaaf_run(58.015, 11.5, 1.81, 0.24),
-    _100m: iaaf_run(25.4347, 18, 1.81, 0.24),
-    _200m: iaaf_run(5.8425, 38, 1.81, 0.24),
-    _300m: iaaf_run(2.58503, 60.1, 1.81, 0.14),
-    _400m: iaaf_run(1.53775, 82, 1.81, 0.14),
-    _800m: iaaf_run(0.13279, 235, 1.85, 0),
-    _1000m: iaaf_run(0.08713, 305.5, 1.85, 0),
-    _1500m: iaaf_run(0.03768, 480, 1.85, 0),
-    _3000m: iaaf_run(0.0105, 1005, 1.85, 0),
-    _5000m: iaaf_run(0.00419, 1680, 1.85, 0),
-    _1000m: iaaf_run(0.000415, 4245, 1.9, 0),
-    _3000mSt: iaaf_run(0.00511, 1155, 1.9, 0),
-    _60mH: iaaf_run(20.5173, 15.5, 1.92, 0.24),
-    _110mH: iaaf_run(5.74325, 28.5, 1.92, 0.24),
-    _200mH: iaaf_run(3.495, 45.5, 1.81, 0.24),
-    _400mH: iaaf_run(1.1466, 92, 1.81, 0.14),
-    _high: iaaf_jump(0.8465, 75, 1.42),
-    _pole: iaaf_jump(0.2797, 100, 1.35),
-    _long: iaaf_jump(0.14354, 220, 1.40),
-    _triple: iaaf_jump(0.06533, 640, 1.4),
-    _shot: iaaf_throw(51.39, 1.5, 1.05),
-    _disc: iaaf_throw(12.91, 4, 1.10),
-    _javelin: iaaf_throw(10.14, 7, 1.08),
-    _hammer: iaaf_throw(13.0449, 7, 1.05)
+// the formulas
+var formulas = {
+  iaaf: {
+    m: {
+      _60m: iaaf_run(58.015, 11.5, 1.81, 0.24),
+      _100m: iaaf_run(25.4347, 18, 1.81, 0.24),
+      _200m: iaaf_run(5.8425, 38, 1.81, 0.24),
+      _300m: iaaf_run(2.58503, 60.1, 1.81, 0.14),
+      _400m: iaaf_run(1.53775, 82, 1.81, 0.14),
+      _800m: iaaf_run(0.13279, 235, 1.85, 0),
+      _1000m: iaaf_run(0.08713, 305.5, 1.85, 0),
+      _1500m: iaaf_run(0.03768, 480, 1.85, 0),
+      _3000m: iaaf_run(0.0105, 1005, 1.85, 0),
+      _5000m: iaaf_run(0.00419, 1680, 1.85, 0),
+      _10000m: iaaf_run(0.000415, 4245, 1.9, 0),
+      _3000mSt: iaaf_run(0.00511, 1155, 1.9, 0),
+      _60mH: iaaf_run(20.5173, 15.5, 1.92, 0.24),
+      _110mH: iaaf_run(5.74325, 28.5, 1.92, 0.24),
+      _200mH: iaaf_run(3.495, 45.5, 1.81, 0.24),
+      _400mH: iaaf_run(1.1466, 92, 1.81, 0.14),
+      _high: iaaf_jump(0.8465, 75, 1.42),
+      _pole: iaaf_jump(0.2797, 100, 1.35),
+      _long: iaaf_jump(0.14354, 220, 1.40),
+      _triple: iaaf_jump(0.06533, 640, 1.4),
+      _shot: iaaf_throw(51.39, 1.5, 1.05),
+      _disc: iaaf_throw(12.91, 4, 1.10),
+      _javelin: iaaf_throw(10.14, 7, 1.08),
+      _hammer: iaaf_throw(13.0449, 7, 1.05)
+    },
+    w: {
+      _60m: iaaf_run(46.0849, 13, 1.81, 0.24),
+      _100m: iaaf_run(17.857, 21, 1.81, 0.24),
+      _200m: iaaf_run(4.99087, 42.5, 1.81, 0.24),
+      _400m: iaaf_run(1.34285, 91.7, 1.81, 0.14),
+      _800m: iaaf_run(0.11193, 254, 1.88, 0),
+      _1000m: iaaf_run(0.07068, 337, 1.88, 0),
+      _1500m: iaaf_run(0.02883, 535, 1.88, 0),
+      _3000m: iaaf_run(0.00683, 1150, 1.88, 0),
+      _5000m: iaaf_run(0.00272, 1920, 1.88, 0),
+      _10000m: iaaf_run(0.000396, 4920, 1.88, 0),
+      _3000mSt: iaaf_run(0.00408, 1320, 1.9, 0),
+      _60mH: iaaf_run(20.0479, 17, 1.835, 0.24),
+      _100mH: iaaf_run(9.23076, 26.7, 1.835, 0.24),
+      _200mH: iaaf_run(2.975, 52, 1.81, 0.24),
+      _400mH: iaaf_run(0.99674, 103, 1.81, 0.14),
+      _high: iaaf_jump(1.84523, 75, 1.348),
+      _pole: iaaf_jump(0.44125, 100, 1.35),
+      _long: iaaf_jump(0.188807, 210, 1.41),
+      _triple: iaaf_jump(0.08559, 600, 1.41),
+      _shot: iaaf_throw(56.0211, 1.5, 1.05),
+      _disc: iaaf_throw(12.3311, 3, 1.10),
+      _javelin: iaaf_throw(15.9803, 3.8, 1.04),
+      _hammer: iaaf_throw(17.5458, 6, 1.05)    
+    }
   },
-  w: {
-    _60m: iaaf_run(46.0849, 13, 1.81, 0.24),
-    _100m: iaaf_run(17.857, 21, 1.81, 0.24),
-    _200m: iaaf_run(4.99087, 42.5, 1.81, 0.24),
-    _400m: iaaf_run(1.34285, 91.7, 1.81, 0.14),
-    _800m: iaaf_run(0.11193, 254, 1.88, 0),
-    _1000m: iaaf_run(0.07068, 337, 1.88, 0),
-    _1500m: iaaf_run(0.02883, 535, 1.88, 0),
-    _3000m: iaaf_run(0.00683, 1150, 1.88, 0),
-    _5000m: iaaf_run(0.00272, 1920, 1.88, 0),
-    _10000m: iaaf_run(0.000396, 4920, 1.88, 0),
-    _3000mSt: iaaf_run(0.00408, 1320, 1.9, 0),
-    _60mH: iaaf_run(20.0479, 17, 1.835, 0.24),
-    _100mH: iaaf_run(9.23076, 26.7, 1.835, 0.24),
-    _200mH: iaaf_run(2.975, 52, 1.81, 0.24),
-    _400mH: iaaf_run(0.99674, 103, 1.81, 0.14),
-    _high: iaaf_jump(1.84523, 75, 1.348),
-    _pole: iaaf_jump(0.44125, 100, 1.35),
-    _long: iaaf_jump(0.188807, 210, 1.41),
-    _triple: iaaf_jump(0.08559, 600, 1.41),
-    _shot: iaaf_throw(56.0211, 1.5, 1.05),
-    _disc: iaaf_throw(12.3311, 3, 1.10),
-    _javelin: iaaf_throw(15.9803, 3.8, 1.04),
-    _hammer: iaaf_throw(17.5458, 6, 1.05)    
+  dlv: {
+    m: {
+      _50m: dlv_run(50, 3.79, 0.0069, 0.24),
+      _60m: dlv_run(60, 4.20312, 0.00639, 0.24),
+      _75m: dlv_run(75, 4.1, 0.00664, 0.24),
+      _100m: dlv_run(100, 4.34100, 0.00676, 0.24),
+      _200m: dlv_run(200, 3.60400, 0.00760 , 0.24),
+      _400m: dlv_run(400, 2.967, 0.00716, 0.14),
+      _800m: dlv_run(800, 2.32500, 0.00644, 0),
+      _1000m: dlv_run(1000, 2.15800, 0.00600, 0),
+      _1500m: dlv_run(1500, 1.91220, 0.00613, 0),
+      _2000m: dlv_run(2000, 1.78400, 0.00600, 0),
+      _3000m: dlv_run(3000, 1.70000, 0.00580, 0),
+      _5000m: dlv_run(5000, 1.52500, 0.00560, 0),
+      _60mH: dlv_run(60, 3.04000, 0.00560, 0.24),
+      _80mH: dlv_run(80, 1.40833, 0.00943, 0.24),
+      _110mH: dlv_run(110, 1.14220, 0.00918, 0.24),
+      _400mH: dlv_run(400, 1.61943, 0.00810, 0.14),
+      _4x50m: dlv_run(200, 3.79000, 0.00345, 0.24),
+      _4x75m: dlv_run(300, 4.10000, 0.00332, 0.14),
+      _4x100m: dlv_run(400, 4.34100, 0.00338, 0.14),
+      _high: dlv_jump(0.841, 0.0008),
+      _pole: dlv_jump(0.64800, 0.00210),
+      _long: dlv_jump(1.15028, 0.00219),
+      _triple: dlv_jump(2.19239, 0.00232),
+      _shot: dlv_throw(1.42500, 0.00370),
+      _disc: dlv_throw(1.40000, 0.00800),
+      _hammer: dlv_throw(-2.17028, 0.01392),
+      _javelin: dlv_throw(0.35000, 0.01052),
+      _200g: dlv_throw(1.936, 0.0124),
+      _80g: dlv_throw(2.80000, 0.01100)
+    },
+    w: {
+      _50m: dlv_run(50, 3.64800, 0.00660, 0.24),
+      _60m: dlv_run(60, 3.65071, 0.00673, 0.24),
+      _75m: dlv_run(75, 3.99800, 0.00660, 0.24),
+      _100m: dlv_run(100, 4.00620, 0.00656, 0.24),
+      _200m: dlv_run(200, 3.78900, 0.00734, 0.24),
+      _400m: dlv_run(400, 2.81000, 0.00716, 0.14),
+      _800m: dlv_run(800, 2.02320, 0.00647, 0),
+      _2000m: dlv_run(2000, 1.80000, 0.00540, 0),
+      _3000m: dlv_run(3000, 1.75000, 0.00500, 0),
+      _60mH: dlv_run(60, 2.12020, 0.00680, 0.24),
+      _80mH: dlv_run(80, 2.01000, 0.00780, 0.24),
+      _100mH: dlv_run(100, 2.01500, 0.00810, 0.24),
+      _4x50m: dlv_run(200, 3.64800, 0.00330, 0.24),
+      _4x75m: dlv_run(300, 3.99800, 0.00330, 0.14),
+      _4x100m: dlv_run(400, 4.00620, 0.00328, 0.14),
+      _high: dlv_jump(0.88070, 0.00068),
+      _long: dlv_jump(1.09350, 0.00208),
+      _shot: dlv_throw(1.27900, 0.00398),
+      _disc: dlv_throw(1.05150, 0.00890),
+      _javelin: dlv_throw(0.42200, 0.01012),
+      _200g: dlv_throw(1.41490, 0.01039),
+      _80g: dlv_throw(2.02320, 0.00874)
+    }
+  }  
+};
+
+var disciplines = {};
+disciplines.iaaf = {};
+disciplines.iaaf.m = {
+  _60m: {
+    name: "60m",
+    id: "60m",
+    disc2pt: formulas.iaaf.m._60m,
+    pt2disc: formulas.iaaf.m._60m.inverse,
+    parsedisc: parseSeconds,
+    showdisc: showSeconds,
+    unit: "s"
+  },
+  _100m: {
+    name: "100m",
+    id: "100m",
+    disc2pt: formulas.iaaf.m._100m,
+    pt2disc: formulas.iaaf.m._100m.inverse,
+    parsedisc: parseSeconds,
+    showdisc: showSeconds,
+    unit: "s"
+  },
+  _200m: {
+    name: "200m",
+    id: "200m",
+    disc2pt: formulas.iaaf.m._200m,
+    pt2disc: formulas.iaaf.m._200m.inverse,
+    parsedisc: parseSeconds,
+    showdisc: showSeconds,
+    unit: "s"
+  },
+  _300m: {
+    name: "300m",
+    id: "300m",
+    disc2pt: formulas.iaaf.m._300m,
+    pt2disc: formulas.iaaf.m._300m.inverse,
+    parsedisc: parseSeconds,
+    showdisc: showSeconds,
+    unit: "s"
+  },
+  _400m: {
+    name: "400m",
+    id: "400m",
+    disc2pt: formulas.iaaf.m._400m,
+    pt2disc: formulas.iaaf.m._400m.inverse,
+    parsedisc: parseSeconds,
+    showdisc: showSeconds,
+    unit: "s"
+  },
+  _800m: {
+    name: "800m",
+    id: "800m",
+    disc2pt: formulas.iaaf.m._800m,
+    pt2disc: formulas.iaaf.m._800m.inverse,
+    parsedisc: parseMinutes,
+    showdisc: showMinutes,
+    unit: "min"
+  },
+  _1000m: {
+    name: "1000m",
+    id: "1000m",
+    disc2pt: formulas.iaaf.m._1000m,
+    pt2disc: formulas.iaaf.m._1000m.inverse,
+    parsedisc: parseMinutes,
+    showdisc: showMinutes,
+    unit: "min"
+  },
+  _1500m: {
+    name: "1500m",
+    id: "1500m",
+    disc2pt: formulas.iaaf.m._1500m,
+    pt2disc: formulas.iaaf.m._1500m.inverse,
+    parsedisc: parseMinutes,
+    showdisc: showMinutes,
+    unit: "min"
+  },
+  _3000m: {
+    name: "3000m",
+    id: "3000m",
+    disc2pt: formulas.iaaf.m._3000m,
+    pt2disc: formulas.iaaf.m._3000m.inverse,
+    parsedisc: parseMinutes,
+    showdisc: showMinutes,
+    unit: "min"
+  },
+  _5000m: {
+    name: "5000m",
+    id: "5000m",
+    disc2pt: formulas.iaaf.m._5000m,
+    pt2disc: formulas.iaaf.m._5000m.inverse,
+    parsedisc: parseMinutes,
+    showdisc: showMinutes,
+    unit: "min"
+  },
+  _10000m: {
+    name: "10000m",
+    id: "10000m",
+    disc2pt: formulas.iaaf.m._10000m,
+    pt2disc: formulas.iaaf.m._10000m.inverse,
+    parsedisc: parseMinutes,
+    showdisc: showMinutes,
+    unit: "min"
+  },
+  _3000mSt: {
+    name: "3000m Hindernis",
+    id: "3000mSt",
+    disc2pt: formulas.iaaf.m._3000mSt,
+    pt2disc: formulas.iaaf.m._3000mSt.inverse,
+    parsedisc: parseMinutes,
+    showdisc: showMinutes,
+    unit: "min"
+  },
+  _60mH: {
+    name: "60m Hürden",
+    id: "60mH",
+    disc2pt: formulas.iaaf.m._60mH,
+    pt2disc: formulas.iaaf.m._60mH.inverse,
+    parsedisc: parseSeconds,
+    showdisc: showSeconds,
+    unit: "s"
+  },
+  _110mH: {
+    name: "110m Hürden",
+    id: "110mH",
+    disc2pt: formulas.iaaf.m._110mH,
+    pt2disc: formulas.iaaf.m._110mH.inverse,
+    parsedisc: parseSeconds,
+    showdisc: showSeconds,
+    unit: "s"
+  },
+  _200mH: {
+    name: "200m Hürden",
+    id: "200mH",
+    disc2pt: formulas.iaaf.m._200mH,
+    pt2disc: formulas.iaaf.m._200mH.inverse,
+    parsedisc: parseSeconds,
+    showdisc: showSeconds,
+    unit: "s"
+  },
+  _400mH: {
+    name: "400m Hürden",
+    id: "400mH",
+    disc2pt: formulas.iaaf.m._400mH,
+    pt2disc: formulas.iaaf.m._400mH.inverse,
+    parsedisc: parseSeconds,
+    showdisc: showSeconds,
+    unit: "s"
+  },
+  _high: {
+    name: "Hochsprung",
+    id: "high",
+    disc2pt: formulas.iaaf.m._200mH,
+    pt2disc: formulas.iaaf.m._200mH.inverse,
+    parsedisc: parseSeconds,
+    showdisc: showSeconds,
+    unit: "s"
+  },
+  _pole: {
+    name: "Stabhoch",
+    id: "pole",
+    disc2pt: formulas.iaaf.m._pole,
+    pt2disc: formulas.iaaf.m._pole.inverse,
+    parsedisc: parseMeters,
+    showdisc: showMeters,
+    unit: "m"
+  },
+  _long: {
+    name: "Weitsprung",
+    id: "long",
+    disc2pt: formulas.iaaf.m._long,
+    pt2disc: formulas.iaaf.m._long.inverse,
+    parsedisc: parseMeters,
+    showdisc: showMeters,
+    unit: "m"
+  },
+  _triple: {
+    name: "Dreisprung",
+    id: "triple",
+    disc2pt: formulas.iaaf.m._triple,
+    pt2disc: formulas.iaaf.m._triple.inverse,
+    parsedisc: parseMeters,
+    showdisc: showMeters,
+    unit: "m"
+  },
+  _shot: {
+    name: "Kugel",
+    id: "shot",
+    disc2pt: formulas.iaaf.m._shot,
+    pt2disc: formulas.iaaf.m._shot.inverse,
+    parsedisc: parseMeters,
+    showdisc: showMeters,
+    unit: "m"
+  },
+  _disc: {
+    name: "Diskus",
+    id: "disc",
+    disc2pt: formulas.iaaf.m._disc,
+    pt2disc: formulas.iaaf.m._disc.inverse,
+    parsedisc: parseMeters,
+    showdisc: showMeters,
+    unit: "m"
+  },
+  _javelin: {
+    name: "Speer",
+    id: "javelin",
+    disc2pt: formulas.iaaf.m._javelin,
+    pt2disc: formulas.iaaf.m._javelin.inverse,
+    parsedisc: parseMeters,
+    showdisc: showMeters,
+    unit: "m"
+  },
+  _hammer: {
+    name: "Hammer",
+    id: "hammer",
+    disc2pt: formulas.iaaf.m._hammer,
+    pt2disc: formulas.iaaf.m._hammer.inverse,
+    parsedisc: parseMeters,
+    showdisc: showMeters,
+    unit: "m"
   }
 };
+
+disciplines.iaaf.w = {
+  _60m: _.extend({},disciplines.iaaf.m._60m, { disc2pt: formulas.iaaf.w._60m, pt2disc: formulas.iaaf.w._60m.inverse }),
+  _100m: _.extend({},disciplines.iaaf.m._100m, { disc2pt: formulas.iaaf.w._100m, pt2disc: formulas.iaaf.w._100m.inverse }),
+  _200m: _.extend({},disciplines.iaaf.m._200m, { disc2pt: formulas.iaaf.w._200m, pt2disc: formulas.iaaf.w._200m.inverse }),
+  _400m: _.extend({},disciplines.iaaf.m._400m, { disc2pt: formulas.iaaf.w._400m, pt2disc: formulas.iaaf.w._400m.inverse }),
+  _800m: _.extend({},disciplines.iaaf.m._800m, { disc2pt: formulas.iaaf.w._800m, pt2disc: formulas.iaaf.w._800m.inverse }),
+  _1000m: _.extend({},disciplines.iaaf.m._1000m, { disc2pt: formulas.iaaf.w._1000m, pt2disc: formulas.iaaf.w._1000m.inverse }),
+  _1500m: _.extend({},disciplines.iaaf.m._1500m, { disc2pt: formulas.iaaf.w._1500m, pt2disc: formulas.iaaf.w._1500m.inverse }),
+  _3000m: _.extend({},disciplines.iaaf.m._3000m, { disc2pt: formulas.iaaf.w._3000m, pt2disc: formulas.iaaf.w._3000m.inverse }),
+  _5000m: _.extend({},disciplines.iaaf.m._5000m, { disc2pt: formulas.iaaf.w._5000m, pt2disc: formulas.iaaf.w._5000m.inverse }),
+  _10000m: _.extend({},disciplines.iaaf.m._10000m, { disc2pt: formulas.iaaf.w._10000m, pt2disc: formulas.iaaf.w._10000m.inverse }),
+  _3000mSt: _.extend({},disciplines.iaaf.m._3000mSt, { disc2pt: formulas.iaaf.w._3000mSt, pt2disc: formulas.iaaf.w._3000mSt.inverse }),
+  _60mH: _.extend({},disciplines.iaaf.m._60mH, { disc2pt: formulas.iaaf.w._60mH, pt2disc: formulas.iaaf.w._60mH.inverse }),
+  _100mH: _.extend({},disciplines.iaaf.m._110mH, {
+    name: "100m Hürden",
+    id: "100mH",
+    disc2pt: formulas.iaaf.w._100mH,
+    pt2disc: formulas.iaaf.w._100mH.inverse
+  }),
+  _200mH: _.extend({},disciplines.iaaf.m._200mH, { disc2pt: formulas.iaaf.w._200mH, pt2disc: formulas.iaaf.w._200mH.inverse }),
+  _400mH: _.extend({},disciplines.iaaf.m._400mH, { disc2pt: formulas.iaaf.w._400mH, pt2disc: formulas.iaaf.w._400mH.inverse }),
+  _high: _.extend({},disciplines.iaaf.m._high, { disc2pt: formulas.iaaf.w._high, pt2disc: formulas.iaaf.w._high.inverse }),
+  _pole: _.extend({},disciplines.iaaf.m._pole, { disc2pt: formulas.iaaf.w._pole, pt2disc: formulas.iaaf.w._pole.inverse }),
+  _long: _.extend({},disciplines.iaaf.m._long, { disc2pt: formulas.iaaf.w._long, pt2disc: formulas.iaaf.w._long.inverse }),
+  _triple: _.extend({},disciplines.iaaf.m._triple, { disc2pt: formulas.iaaf.w._triple, pt2disc: formulas.iaaf.w._triple.inverse }),
+  _shot: _.extend({},disciplines.iaaf.m._shot, { disc2pt: formulas.iaaf.w._shot, pt2disc: formulas.iaaf.w._shot.inverse }),
+  _disc: _.extend({},disciplines.iaaf.m._disc, { disc2pt: formulas.iaaf.w._disc, pt2disc: formulas.iaaf.w._disc.inverse }),
+  _javelin: _.extend({},disciplines.iaaf.m._javelin, { disc2pt: formulas.iaaf.w._javelin, pt2disc: formulas.iaaf.w._javelin.inverse }),
+  _hammer: _.extend({},disciplines.iaaf.m._hammer, { disc2pt: formulas.iaaf.w._hammer, pt2disc: formulas.iaaf.w._hammer.inverse })    
+};
+
+disciplines.dlv = {};
+disciplines.dlv.m = {
+  _50m: _.extend({},disciplines.iaaf.m._60m, {
+    name: "50m",
+    id: "50m",
+    disc2pt: formulas.dlv.m._50m,
+    pt2disc: formulas.dlv.m._50m.inverse
+  }),
+  _60m: _.extend({},disciplines.iaaf.m._60m, { disc2pt: formulas.dlv.m._60m, pt2disc: formulas.dlv.m._60m.inverse }),
+  _75m: _.extend({},disciplines.iaaf.m._60m, {
+    name: "75m",
+    id: "75m",
+    disc2pt: formulas.dlv.m._75m,
+    pt2disc: formulas.dlv.m._75m.inverse
+  }),
+  _100m: _.extend({},disciplines.iaaf.m._100m, { disc2pt: formulas.dlv.m._100m, pt2disc: formulas.dlv.m._100m.inverse }),
+  _200m: _.extend({},disciplines.iaaf.m._200m, { disc2pt: formulas.dlv.m._200m, pt2disc: formulas.dlv.m._200m.inverse }),
+  _400m: _.extend({},disciplines.iaaf.m._400m, { disc2pt: formulas.dlv.m._400m, pt2disc: formulas.dlv.m._400m.inverse }),
+  _800m: _.extend({},disciplines.iaaf.m._800m, { disc2pt: formulas.dlv.m._800m, pt2disc: formulas.dlv.m._800m.inverse }),
+  _1000m: _.extend({},disciplines.iaaf.m._1000m, { disc2pt: formulas.dlv.m._1000m, pt2disc: formulas.dlv.m._1000m.inverse }),
+  _1500m: _.extend({},disciplines.iaaf.m._1500m, { disc2pt: formulas.dlv.m._1500m, pt2disc: formulas.dlv.m._1500m.inverse }),
+  _2000m: _.extend({},disciplines.iaaf.m._2000m, { disc2pt: formulas.dlv.m._2000m, pt2disc: formulas.dlv.m._2000m.inverse }),
+  _3000m: _.extend({},disciplines.iaaf.m._3000m, { disc2pt: formulas.dlv.m._3000m, pt2disc: formulas.dlv.m._3000m.inverse }),
+  _5000m: _.extend({},disciplines.iaaf.m._5000m, { disc2pt: formulas.dlv.m._5000m, pt2disc: formulas.dlv.m._5000m.inverse }),
+  _60mH: _.extend({},disciplines.iaaf.m._60mH, { disc2pt: formulas.dlv.m._60mH, pt2disc: formulas.dlv.m._60mH.inverse }),
+  _80mH: _.extend({},disciplines.iaaf.m._60mH, {
+    name: "80m Hürden",
+    id: "80mH",
+    disc2pt: formulas.dlv.m._80mH,
+    pt2disc: formulas.dlv.m._80mH.inverse
+  }),
+  _110mH: _.extend({},disciplines.iaaf.m._110mH, { disc2pt: formulas.dlv.m._110mH, pt2disc: formulas.dlv.m._110mH.inverse }),
+  _400mH: _.extend({},disciplines.iaaf.m._400mH, { disc2pt: formulas.dlv.m._400mH, pt2disc: formulas.dlv.m._400mH.inverse }),
+  _4x50m: _.extend({},disciplines.iaaf.m._60m, {
+    name: "4x50m Staffel",
+    id: "4x50m",
+    disc2pt: formulas.dlv.m._4x50m,
+    pt2disc: formulas.dlv.m._4x50m.inverse
+  }),
+  _4x75m: _.extend({},disciplines.iaaf.m._60m, {
+    name: "4x75m Staffel",
+    id: "4x75m",
+    disc2pt: formulas.dlv.m._4x75m,
+    pt2disc: formulas.dlv.m._4x75m.inverse
+  }),
+  _4x100m: _.extend({},disciplines.iaaf.m._60m, {
+    name: "4x100m Staffel",
+    id: "4x100m",
+    disc2pt: formulas.dlv.m._4x100m,
+    pt2disc: formulas.dlv.m._4x100m.inverse
+  }),
+  _high: _.extend({},disciplines.iaaf.m._high, { disc2pt: formulas.dlv.m._high, pt2disc: formulas.dlv.m._high.inverse }),
+  _pole: _.extend({},disciplines.iaaf.m._pole, { disc2pt: formulas.dlv.m._pole, pt2disc: formulas.dlv.m._pole.inverse }),
+  _long: _.extend({},disciplines.iaaf.m._long, { disc2pt: formulas.dlv.m._long, pt2disc: formulas.dlv.m._long.inverse }),
+  _triple: _.extend({},disciplines.iaaf.m._triple, { disc2pt: formulas.dlv.m._triple, pt2disc: formulas.dlv.m._triple.inverse }),
+  _shot: _.extend({},disciplines.iaaf.m._shot, { disc2pt: formulas.dlv.m._shot, pt2disc: formulas.dlv.m._shot.inverse }),
+  _disc: _.extend({},disciplines.iaaf.m._disc, { disc2pt: formulas.dlv.m._disc, pt2disc: formulas.dlv.m._disc.inverse }),
+  _hammer: _.extend({},disciplines.iaaf.m._hammer, { disc2pt: formulas.dlv.m._hammer, pt2disc: formulas.dlv.m._hammer.inverse }),
+  _javelin: _.extend({},disciplines.iaaf.m._javelin, { disc2pt: formulas.dlv.m._javelin, pt2disc: formulas.dlv.m._javelin.inverse }),
+  _200g: _.extend({},disciplines.iaaf.m._javelin, {
+    name: "200g Schlagball",
+    id: "200g",
+    disc2pt: formulas.dlv.m._200g,
+    pt2disc: formulas.dlv.m._200g.inverse
+  }),
+  _80g: _.extend({},disciplines.iaaf.m._javelin, {
+    name: "80g Schlagball",
+    id: "80g",
+    disc2pt: formulas.dlv.m._80g,
+    pt2disc: formulas.dlv.m._80g.inverse
+  })
+};
+disciplines.dlv.w = {
+  _50m: _.extend({},disciplines.dlv.m._50m, { disc2pt: formulas.dlv.w._50m, pt2disc: formulas.dlv.w._50m.inverse }),
+  _60m: _.extend({},disciplines.dlv.m._60m, { disc2pt: formulas.dlv.w._60m, pt2disc: formulas.dlv.w._60m.inverse }),
+  _75m: _.extend({},disciplines.dlv.m._75m, { disc2pt: formulas.dlv.w._75m, pt2disc: formulas.dlv.w._75m.inverse }),
+  _100m: _.extend({},disciplines.dlv.m._100m, { disc2pt: formulas.dlv.w._100m, pt2disc: formulas.dlv.w._100m.inverse }),
+  _200m: _.extend({},disciplines.dlv.m._200m, { disc2pt: formulas.dlv.w._200m, pt2disc: formulas.dlv.w._200m.inverse }),
+  _400m: _.extend({},disciplines.dlv.m._400m, { disc2pt: formulas.dlv.w._400m, pt2disc: formulas.dlv.w._400m.inverse }),
+  _800m: _.extend({},disciplines.dlv.m._800m, { disc2pt: formulas.dlv.w._800m, pt2disc: formulas.dlv.w._800m.inverse }),
+  _2000m: _.extend({},disciplines.dlv.m._2000m, { disc2pt: formulas.dlv.w._2000m, pt2disc: formulas.dlv.w._2000m.inverse }),
+  _3000m: _.extend({},disciplines.dlv.m._3000m, { disc2pt: formulas.dlv.w._3000m, pt2disc: formulas.dlv.w._3000m.inverse }),
+  _60mH: _.extend({},disciplines.dlv.m._60mH, { disc2pt: formulas.dlv.w._60mH, pt2disc: formulas.dlv.w._60mH.inverse }),
+  _80mH: _.extend({},disciplines.dlv.m._80mH, { disc2pt: formulas.dlv.w._80mH, pt2disc: formulas.dlv.w._80mH.inverse }),
+  _100mH: _.extend({},disciplines.dlv.m._110mH, {
+    name: "100m Hürden",
+    id: "100mH",
+    disc2pt: formulas.dlv.w._100mH,
+    pt2disc: formulas.dlv.w._100mH.inverse
+  }),
+  _4x50m: _.extend({},disciplines.dlv.m._4x50m, { disc2pt: formulas.dlv.w._4x50m, pt2disc: formulas.dlv.w._4x50m.inverse }),
+  _4x75m: _.extend({},disciplines.dlv.m._4x75m, { disc2pt: formulas.dlv.w._4x75m, pt2disc: formulas.dlv.w._4x75m.inverse }),
+  _4x100m: _.extend({},disciplines.dlv.m._4x100m, { disc2pt: formulas.dlv.w._4x100m, pt2disc: formulas.dlv.w._4x100m.inverse }),
+  _high: _.extend({},disciplines.dlv.m._high, { disc2pt: formulas.dlv.w._high, pt2disc: formulas.dlv.w._high.inverse }),
+  _long: _.extend({},disciplines.dlv.m._long, { disc2pt: formulas.dlv.w._long, pt2disc: formulas.dlv.w._long.inverse }),
+  _shot: _.extend({},disciplines.dlv.m._shot, { disc2pt: formulas.dlv.w._shot, pt2disc: formulas.dlv.w._shot.inverse }),
+  _disc: _.extend({},disciplines.dlv.m._disc, { disc2pt: formulas.dlv.w._disc, pt2disc: formulas.dlv.w._disc.inverse }),
+  _javelin: _.extend({},disciplines.dlv.m._javelin, { disc2pt: formulas.dlv.w._javelin, pt2disc: formulas.dlv.w._javelin.inverse }),
+  _200g: _.extend({},disciplines.dlv.m._200g, { disc2pt: formulas.dlv.w._200g, pt2disc: formulas.dlv.w._200g.inverse }),
+  _80g: _.extend({},disciplines.dlv.m._80g, { disc2pt: formulas.dlv.w._80g, pt2disc: formulas.dlv.w._80g.inverse })
+};
+
+_.mixin({ from: function(list, obj) { return _(list).map(function (disc) { return obj[disc]; }); } });
+
+console.log(_(['_50m', '_long', '_80g']).from(disciplines.dlv.m))
 
 var rechner = [
   {
     name: "Dreikampf SC/D",
     id: "dscd",
-    disciplines: [
-      {
-        name: "50m",
-        id: "50m",
-        disc2pt: dlv_formulas.m._50m,
-        pt2disc: dlv_formulas.m._50m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "long",
-        disc2pt: dlv_formulas.m._long,
-        pt2disc: dlv_formulas.m._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "80g Schlagball",
-        id: "80g",
-        disc2pt: dlv_formulas.m._80g,
-        pt2disc: dlv_formulas.m._80g.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      }
-    ]
+    disciplines: _(['_50m', '_long', '_80g']).from(disciplines.dlv.m)
   },
   {
     name: "Dreikampf SiC/D",
     id: "dsicd",
-    disciplines: [
-      {
-        name: "50m",
-        id: "50m",
-        disc2pt: dlv_formulas.w._50m,
-        pt2disc: dlv_formulas.w._50m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "long",
-        disc2pt: dlv_formulas.w._long,
-        pt2disc: dlv_formulas.w._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "80g Schlagball",
-        id: "80g",
-        disc2pt: dlv_formulas.w._80g,
-        pt2disc: dlv_formulas.w._80g.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      }
-    ]
+    disciplines: _(['_50m', '_long', '_80g']).from(disciplines.dlv.w)
   },
   {
     name: "Dreikampf SB",
     id: "dsb",
-    disciplines: [
-      {
-        name: "75m",
-        id: "75m",
-        disc2pt: dlv_formulas.m._75m,
-        pt2disc: dlv_formulas.m._75m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "long",
-        disc2pt: dlv_formulas.m._long,
-        pt2disc: dlv_formulas.m._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "200g Schlagball",
-        id: "200g",
-        disc2pt: dlv_formulas.m._200g,
-        pt2disc: dlv_formulas.m._200g.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      }
-    ]
+    disciplines: _(['_75m', '_long', '_200g']).from(disciplines.dlv.m)
   },
   {
     name: "Dreikampf SiB",
     id: "dsib",
-    disciplines: [
-      {
-        name: "75m",
-        id: "75m",
-        disc2pt: dlv_formulas.w._75m,
-        pt2disc: dlv_formulas.w._75m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "long",
-        disc2pt: dlv_formulas.w._long,
-        pt2disc: dlv_formulas.w._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "200g Schlagball",
-        id: "200g",
-        disc2pt: dlv_formulas.w._200g,
-        pt2disc: dlv_formulas.w._200g.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      }
-    ]
+    disciplines: _(['_75m', '_long', '_200g']).from(disciplines.dlv.w)
   },
   {
     name: "Dreikampf SA",
     id: "dsa",
-    disciplines: [
-      {
-        name: "100m",
-        id: "100m",
-        disc2pt: dlv_formulas.m._100m,
-        pt2disc: dlv_formulas.m._100m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "long",
-        disc2pt: dlv_formulas.m._long,
-        pt2disc: dlv_formulas.m._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "200g Schlagball",
-        id: "200g",
-        disc2pt: dlv_formulas.m._200g,
-        pt2disc: dlv_formulas.m._200g.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      }
-    ]
+    disciplines: _(['_100m', '_long', '_200g']).from(disciplines.dlv.m)
   },
   {
     name: "Dreikampf SiA",
     id: "dsia",
-    disciplines: [
-      {
-        name: "100m",
-        id: "100m",
-        disc2pt: dlv_formulas.w._100m,
-        pt2disc: dlv_formulas.w._100m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "long",
-        disc2pt: dlv_formulas.w._long,
-        pt2disc: dlv_formulas.w._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "200g Schlagball",
-        id: "200g",
-        disc2pt: dlv_formulas.w._200g,
-        pt2disc: dlv_formulas.w._200g.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      }
-    ]
+    disciplines: _(['_100m', '_long', '_200g']).from(disciplines.dlv.w)
   },
   {
     name: "Vierkampf SC",
     id: "vsc",
-    disciplines: [
-      {
-        name: "50m",
-        id: "50m",
-        disc2pt: dlv_formulas.m._50m,
-        pt2disc: dlv_formulas.m._50m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "long",
-        disc2pt: dlv_formulas.m._long,
-        pt2disc: dlv_formulas.m._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {
-        name: "Hochsprung",
-        id: "high",
-        disc2pt: dlv_formulas.m._long,
-        pt2disc: dlv_formulas.m._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "80g Schlagball",
-        id: "80g",
-        disc2pt: dlv_formulas.m._80g,
-        pt2disc: dlv_formulas.m._80g.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      }
-    ]
+    disciplines: _(['_50m', '_high', '_long', '_80g']).from(disciplines.dlv.m)
   },
   {
     name: "Vierkampf SiC",
     id: "vsic",
-    disciplines: [
-      {
-        name: "50m",
-        id: "50m",
-        disc2pt: dlv_formulas.w._50m,
-        pt2disc: dlv_formulas.w._50m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "long",
-        disc2pt: dlv_formulas.w._long,
-        pt2disc: dlv_formulas.w._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {
-        name: "Hochsprung",
-        id: "high",
-        disc2pt: dlv_formulas.w._long,
-        pt2disc: dlv_formulas.w._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "80g Schlagball",
-        id: "80g",
-        disc2pt: dlv_formulas.w._80g,
-        pt2disc: dlv_formulas.w._80g.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      }
-    ]
+    disciplines: _(['_50m', '_high', '_long', '_80g']).from(disciplines.dlv.w)
   },
   {
     name: "Vierkampf SB",
     id: "vsb",
-    disciplines: [
-      {
-        name: "75m",
-        id: "75m",
-        disc2pt: dlv_formulas.m._75m,
-        pt2disc: dlv_formulas.m._75m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "long",
-        disc2pt: dlv_formulas.m._long,
-        pt2disc: dlv_formulas.m._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {
-        name: "Hochsprung",
-        id: "high",
-        disc2pt: dlv_formulas.m._high,
-        pt2disc: dlv_formulas.m._high.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "200g Schlagball",
-        id: "200g",
-        disc2pt: dlv_formulas.m._200g,
-        pt2disc: dlv_formulas.m._200g.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      }
-    ]
+    disciplines: _(['_75m', '_high', '_long', '_200g']).from(disciplines.dlv.m)
   },
   {
     name: "Vierkampf SiB",
     id: "vsib",
-    disciplines: [
-      {
-        name: "75m",
-        id: "75m",
-        disc2pt: dlv_formulas.w._75m,
-        pt2disc: dlv_formulas.w._75m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "long",
-        disc2pt: dlv_formulas.w._long,
-        pt2disc: dlv_formulas.w._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {
-        name: "Hochsprung",
-        id: "high",
-        disc2pt: dlv_formulas.w._high,
-        pt2disc: dlv_formulas.w._high.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "200g Schlagball",
-        id: "200g",
-        disc2pt: dlv_formulas.w._200g,
-        pt2disc: dlv_formulas.w._200g.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      }
-    ]
+    disciplines: _(['_75m', '_high', '_long', '_200g']).from(disciplines.dlv.w)
   },
   {
     name: "Vierkampf SA",
     id: "vsa",
-    disciplines: [
-      {
-        name: "100m",
-        id: "100m",
-        disc2pt: dlv_formulas.m._100m,
-        pt2disc: dlv_formulas.m._100m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "long",
-        disc2pt: dlv_formulas.m._long,
-        pt2disc: dlv_formulas.m._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {
-        name: "Hochsprung",
-        id: "high",
-        disc2pt: dlv_formulas.m._long,
-        pt2disc: dlv_formulas.m._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "Kugel",
-        id: "shot",
-        disc2pt: dlv_formulas.m._shot,
-        pt2disc: dlv_formulas.m._shot.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      }
-    ]
+    disciplines: _(['_100m', '_high', '_long', '_shot']).from(disciplines.dlv.m)
   },
   {
     name: "Vierkampf SiA",
     id: "vsia",
-    disciplines: [
-      {
-        name: "100m",
-        id: "100m",
-        disc2pt: dlv_formulas.w._100m,
-        pt2disc: dlv_formulas.w._100m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "long",
-        disc2pt: dlv_formulas.w._long,
-        pt2disc: dlv_formulas.w._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {
-        name: "Hochsprung",
-        id: "high",
-        disc2pt: dlv_formulas.w._long,
-        pt2disc: dlv_formulas.w._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "Kugel",
-        id: "shot",
-        disc2pt: dlv_formulas.w._shot,
-        pt2disc: dlv_formulas.w._shot.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      }
-    ]
+    disciplines: _(['_100m', '_high', '_long', '_shot']).from(disciplines.dlv.w)
   },
   {
     name: "Blockwettkampf Sprint SA",
     id: "bspspsa",
-    disciplines: [
-      {
-        name: "100m",
-        id: "100m",
-        disc2pt: dlv_formulas.m._100m,
-        pt2disc: dlv_formulas.m._100m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "80m Hürden",
-        id: "80mH",
-        disc2pt: dlv_formulas.m._80mH,
-        pt2disc: dlv_formulas.m._80mH.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "long",
-        disc2pt: dlv_formulas.m._long,
-        pt2disc: dlv_formulas.m._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {
-        name: "Hochsprung",
-        id: "high",
-        disc2pt: dlv_formulas.m._high,
-        pt2disc: dlv_formulas.m._high.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "Speer",
-        id: "javelin",
-        disc2pt: dlv_formulas.m._javelin,
-        pt2disc: dlv_formulas.m._javelin.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      }
-    ]
+    disciplines: _(['_100m', '_80mH', '_high', '_long', '_javelin']).from(disciplines.dlv.m)
   },
   {
     name: "Siebenkampf WJB",
     id: "skfwjb",
-    disciplines: [
-      {
-        name: "100m Hürden",
-        id: "100mH",
-        disc2pt: iaaf_formulas.w._100mH,
-        pt2disc: iaaf_formulas.w._100mH.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {              
-        name: "Hochsprung",
-        id: "hoch",
-        disc2pt: iaaf_formulas.w._high,
-        pt2disc: iaaf_formulas.w._high.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "Kugelstoßen",
-        id: "kugel",
-        disc2pt: iaaf_formulas.w._shot,
-        pt2disc: iaaf_formulas.w._shot.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {
-        name: "100m",
-        id: "100m",
-        disc2pt: iaaf_formulas.w._100m,
-        pt2disc: iaaf_formulas.w._100m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "weit",
-        disc2pt: iaaf_formulas.w._long,
-        pt2disc: iaaf_formulas.w._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "Speer",
-        id: "speer",
-        disc2pt: iaaf_formulas.w._javelin,
-        pt2disc: iaaf_formulas.w._javelin.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {
-        name: "800m",
-        id: "800m",
-        disc2pt: iaaf_formulas.w._800m,
-        pt2disc: iaaf_formulas.w._800m.inverse,
-        parsedisc: parseMinutes,
-        showdisc: showMinutes,
-        unit: "min:s"
-      }
-    ]
+    disciplines: _(["_100mH", "_high", "_shot", "_100m", "_long", "_javelin", "_800m"]).from(disciplines.iaaf.w)
   },
   {
     name: "Siebenkampf F/WJA",
     id: "skfwja",
-    disciplines: [
-      {
-        name: "100m Hürden",
-        id: "100mH",
-        disc2pt: iaaf_formulas.w._100mH,
-        pt2disc: iaaf_formulas.w._100mH.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {              
-        name: "Hochsprung",
-        id: "hoch",
-        disc2pt: iaaf_formulas.w._high,
-        pt2disc: iaaf_formulas.w._high.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "Kugelstoßen",
-        id: "kugel",
-        disc2pt: iaaf_formulas.w._shot,
-        pt2disc: iaaf_formulas.w._shot.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {
-        name: "200m",
-        id: "200m",
-        disc2pt: iaaf_formulas.w._200m,
-        pt2disc: iaaf_formulas.w._200m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "weit",
-        disc2pt: iaaf_formulas.w._long,
-        pt2disc: iaaf_formulas.w._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "Speer",
-        id: "speer",
-        disc2pt: iaaf_formulas.w._javelin,
-        pt2disc: iaaf_formulas.w._javelin.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {
-        name: "800m",
-        id: "800m",
-        disc2pt: iaaf_formulas.w._800m,
-        pt2disc: iaaf_formulas.w._800m.inverse,
-        parsedisc: parseMinutes,
-        showdisc: showMinutes,
-        unit: "min:s"
-      }
-    ]
+    disciplines: _(["_100mH", "_high", "_shot", "_200m", "_long", "_javelin", "_800m"]).from(disciplines.iaaf.w)
   },
   {
     name: "Zehnkampf M/MJ",
     id: "zk",
-    disciplines: [
-      {
-        name: "100m",
-        id: "100m",
-        disc2pt: iaaf_formulas.m._100m,
-        pt2disc: iaaf_formulas.m._100m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "Weitsprung",
-        id: "weit",
-        disc2pt: iaaf_formulas.m._long,
-        pt2disc: iaaf_formulas.m._long.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "Kugelstoßen",
-        id: "kugel",
-        disc2pt: iaaf_formulas.m._shot,
-        pt2disc: iaaf_formulas.m._shot.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "Hochsprung",
-        id: "hoch",
-        disc2pt: iaaf_formulas.m._high,
-        pt2disc: iaaf_formulas.m._high.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {
-        name: "400m",
-        id: "400m",
-        disc2pt: iaaf_formulas.m._400m,
-        pt2disc: iaaf_formulas.m._400m.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {
-        name: "110m Hürden",
-        id: "110mH",
-        disc2pt: iaaf_formulas.m._110mH,
-        pt2disc: iaaf_formulas.m._110mH.inverse,
-        parsedisc: parseSeconds,
-        showdisc: showSeconds,
-        unit: "s"
-      },
-      {              
-        name: "Diskus",
-        id: "diskus",
-        disc2pt: iaaf_formulas.m._disc,
-        pt2disc: iaaf_formulas.m._disc.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "Stabhochsprung",
-        id: "stab",
-        disc2pt: iaaf_formulas.m._pole,
-        pt2disc: iaaf_formulas.m._pole.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {              
-        name: "Speer",
-        id: "speer",
-        disc2pt: iaaf_formulas.m._javelin,
-        pt2disc: iaaf_formulas.m._javelin.inverse,
-        parsedisc: parseMeters,
-        showdisc: showMeters,
-        unit: "m"
-      },
-      {
-        name: "1500m",
-        id: "1500m",
-        disc2pt: iaaf_formulas.m._1500m,
-        pt2disc: iaaf_formulas.m._1500m.inverse,
-        parsedisc: parseMinutes,
-        showdisc: showMinutes,
-        unit: "min:s"
-      }
-    ]
+    disciplines: _(["_100m", "_long", "_shot", "_high", "_400m", "_110mH", "_disc", "_pole", "_javelin", "_1500m"]).from(disciplines.iaaf.m)
   }
 ]
 /* templates */
