@@ -1,10 +1,16 @@
 /* Javascript Mehrkampfrechner (c)2010 Daniel Kirsch */
 (function($, _) {
-// business logic here
+  
+  _.mixin({
+    flip : function(fn) {
+      return function(a,b) { return fn(b,a); };
+    }
+  });
 
+// business logic here
 Number.prototype.floor = function (prec) { return Math.floor(this*Math.pow(10,prec))/Math.pow(10,prec); }
 
-var parseSeconds = function (s) {g
+var parseSeconds = function (s) {
   return parseFloat(s.replace(',','.')).floor(2);
 }
 
@@ -98,6 +104,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
   
   var t = ''
   t+= '<h2>{{name}}</h2>'
+  t+= '<input type="checkbox" id="{{ns}}-penalize" checked="true"> elektronische Zeitnahme'
   t+= '<table>'
   t+= '<thead><tr><th>Disziplin</th><th>Leistung</th><th>Einheit</th><th>Punkte</th></tr></thead>'
   t+= '<tfoot><tr><td colspan="3"><label for="{{ns}}-total">Gesamt</label></td><td class="total"><input id="{{ns}}-total" type="text" tabindex="2"/></td></tr></tfoot>'
@@ -137,6 +144,31 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
   // total
   var total = $('#'+ns+'-total', rechner);
   
+  // penalties
+  var penalize = function() { return !$('#'+ns+'-penalize', rechner).is(':checked'); }
+  $('#'+ns+'-penalize', rechner).change(function () {
+    $('input.set', rechner).keyup();
+  });
+  $.each(disciplines, function(index, discipline) {
+    var originalpt2disc = discipline.pt2disc;
+    discipline.pt2disc = function (val) {
+      if (penalize()) {
+        return originalpt2disc(val, true);
+      }
+      else {
+        return originalpt2disc(val);
+      }
+    }
+    var originaldisc2pt = discipline.disc2pt;
+    discipline.disc2pt = function (val) {
+      if (penalize()) {
+        return originaldisc2pt(val, true);
+      }
+      else {
+        return originaldisc2pt(val);
+      }
+    }
+  });
   // helper
   var disenable = function () {
     // disenable pts/disc
@@ -341,9 +373,22 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
 }
 
 /*** dlv formulas ***/
-var dlv_run = function (d,a,c) {
-  var fn = function(m) { return Math.floor((d/m-a)/c); }
-  fn.inverse = function(pt) { return d/(pt*c+a); }
+var dlv_run = function (d,a,c,penalty) {
+  var fn = function(m, penalize) {
+    if (penalize) {
+      return Math.floor((d/(m+penalty)-a)/c);      
+    }
+    else {
+      return Math.floor((d/m-a)/c);
+    }
+  }
+  fn.inverse = function(pt, penalize) {
+    if (penalize) {
+    }
+    else {
+      return d/(pt*c+a)-penalty;      
+    }
+  }
   return fn;
 }
 var dlv_jump = function (a,c) {
@@ -354,10 +399,10 @@ var dlv_jump = function (a,c) {
 var dlv_throw = dlv_jump;
 var dlv_formulas = {
   m: {
-    _50m: dlv_run(50, 3.79, 0.0069),
-    _75m: dlv_run(75, 4.1, 0.00664),
-    _100m: dlv_run(100, 4.34100, 0.00676),
-    _80mH: dlv_run(80, 1.40833, 0.00943),
+    _50m: dlv_run(50, 3.79, 0.0069, 0.24),
+    _75m: dlv_run(75, 4.1, 0.00664, 0.24),
+    _100m: dlv_run(100, 4.34100, 0.00676, 0.24),
+    _80mH: dlv_run(80, 1.40833, 0.00943, 0.24),
     _long: dlv_jump(1.15028, 0.00219),
     _high: dlv_jump(0.841, 0.0008),
     _200g: dlv_throw(1.936, 0.0124),
@@ -366,9 +411,23 @@ var dlv_formulas = {
 }
 
 /*** iaaf formulas ***/
-var iaaf_run = function (a,b,c) {
-  var fn = function (m) { return Math.floor(a * Math.pow(b-m, c)); };
-  fn.inverse = function (pt) { return b - Math.pow(pt/a,1/c); };
+var iaaf_run = function (a,b,c,penalty) {
+  var fn = function (m, penalize) {
+    if (penalize) {
+      return Math.floor(a * Math.pow(b-(m+penalty), c));
+    }
+    else {
+      return Math.floor(a * Math.pow(b-m, c));
+    }
+  };
+  fn.inverse = function (pt, penalize) {
+    if (penalize) {
+      return b - Math.pow(pt/a,1/c) - penalty;
+    }
+    else {
+      return b - Math.pow(pt/a,1/c);
+    }
+  };
   return fn;
 }
 var iaaf_throw = function (a,b,c) {
@@ -383,22 +442,22 @@ var iaaf_jump = function (a,b,c) {
 }
 var iaaf_formulas = {
   m: {
-    _60m: iaaf_run(58.015, 11.5, 1.81),
-    _100m: iaaf_run(25.4347, 18, 1.81),
-    _200m: iaaf_run(5.8425, 38, 1.81),
-    _300m: iaaf_run(2.58503, 60.1, 1.81),
-    _400m: iaaf_run(1.53775, 82, 1.81),
-    _800m: iaaf_run(0.13279, 235, 1.85),
-    _1000m: iaaf_run(0.08713, 305.5, 1.85),
-    _1500m: iaaf_run(0.03768, 480, 1.85),
-    _3000m: iaaf_run(0.0105, 1005, 1.85),
-    _5000m: iaaf_run(0.00419, 1680, 1.85),
-    _1000m: iaaf_run(0.000415, 4245, 1.9),
-    _3000mSt: iaaf_run(0.00511, 1155, 1.9),
-    _60mH: iaaf_run(20.5173, 15.5, 1.92),
-    _110mH: iaaf_run(5.74325, 28.5, 1.92),
-    _200mH: iaaf_run(3.495, 45.5, 1.81),
-    _400mH: iaaf_run(1.1466, 92, 1.81),
+    _60m: iaaf_run(58.015, 11.5, 1.81, 0.24),
+    _100m: iaaf_run(25.4347, 18, 1.81, 0.24),
+    _200m: iaaf_run(5.8425, 38, 1.81, 0.24),
+    _300m: iaaf_run(2.58503, 60.1, 1.81, 0.14),
+    _400m: iaaf_run(1.53775, 82, 1.81, 0.14),
+    _800m: iaaf_run(0.13279, 235, 1.85, 0),
+    _1000m: iaaf_run(0.08713, 305.5, 1.85, 0),
+    _1500m: iaaf_run(0.03768, 480, 1.85, 0),
+    _3000m: iaaf_run(0.0105, 1005, 1.85, 0),
+    _5000m: iaaf_run(0.00419, 1680, 1.85, 0),
+    _1000m: iaaf_run(0.000415, 4245, 1.9, 0),
+    _3000mSt: iaaf_run(0.00511, 1155, 1.9, 0),
+    _60mH: iaaf_run(20.5173, 15.5, 1.92, 0.24),
+    _110mH: iaaf_run(5.74325, 28.5, 1.92, 0.24),
+    _200mH: iaaf_run(3.495, 45.5, 1.81, 0.24),
+    _400mH: iaaf_run(1.1466, 92, 1.81, 0.14),
     _high: iaaf_jump(0.8465, 75, 1.42),
     _pole: iaaf_jump(0.2797, 100, 1.35),
     _long: iaaf_jump(0.14354, 220, 1.40),
@@ -409,21 +468,21 @@ var iaaf_formulas = {
     _hammer: iaaf_throw(13.0449, 7, 1.05)
   },
   w: {
-    _60m: iaaf_run(46.0849, 13, 1.81),
-    _100m: iaaf_run(17.857, 21, 1.81),
-    _200m: iaaf_run(4.99087, 42.5, 1.81),
-    _400m: iaaf_run(1.34285, 91.7, 1.81),
-    _800m: iaaf_run(0.11193, 254, 1.88),
-    _1000m: iaaf_run(0.07068, 337, 1.88),
-    _1500m: iaaf_run(0.02883, 535, 1.88),
-    _3000m: iaaf_run(0.00683, 1150, 1.88),
-    _5000m: iaaf_run(0.00272, 1920, 1.88),
-    _10000m: iaaf_run(0.000396, 4920, 1.88),
-    _3000mSt: iaaf_run(0.00408, 1320, 1.9),
-    _60mH: iaaf_run(20.0479, 17, 1.835),
-    _100mH: iaaf_run(9.23076, 26.7, 1.835),
-    _200mH: iaaf_run(2.975, 52, 1.81),
-    _400mH: iaaf_run(0.99674, 103, 1.81),
+    _60m: iaaf_run(46.0849, 13, 1.81, 0.24),
+    _100m: iaaf_run(17.857, 21, 1.81, 0.24),
+    _200m: iaaf_run(4.99087, 42.5, 1.81, 0.24),
+    _400m: iaaf_run(1.34285, 91.7, 1.81, 0.14),
+    _800m: iaaf_run(0.11193, 254, 1.88, 0),
+    _1000m: iaaf_run(0.07068, 337, 1.88, 0),
+    _1500m: iaaf_run(0.02883, 535, 1.88, 0),
+    _3000m: iaaf_run(0.00683, 1150, 1.88, 0),
+    _5000m: iaaf_run(0.00272, 1920, 1.88, 0),
+    _10000m: iaaf_run(0.000396, 4920, 1.88, 0),
+    _3000mSt: iaaf_run(0.00408, 1320, 1.9, 0),
+    _60mH: iaaf_run(20.0479, 17, 1.835, 0.24),
+    _100mH: iaaf_run(9.23076, 26.7, 1.835, 0.24),
+    _200mH: iaaf_run(2.975, 52, 1.81, 0.24),
+    _400mH: iaaf_run(0.99674, 103, 1.81, 0.14),
     _high: iaaf_jump(1.84523, 75, 1.348),
     _pole: iaaf_jump(0.44125, 100, 1.35),
     _long: iaaf_jump(0.188807, 210, 1.41),
