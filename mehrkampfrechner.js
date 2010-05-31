@@ -541,6 +541,72 @@ var iaaf_formulas = {
 
 var rechner = [
   {
+    name: "Dreikampf SC/D",
+    id: "dscd",
+    disciplines: [
+      {
+        name: "50m",
+        id: "50m",
+        disc2pt: dlv_formulas.m._50m,
+        pt2disc: dlv_formulas.m._50m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "long",
+        disc2pt: dlv_formulas.m._long,
+        pt2disc: dlv_formulas.m._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "80g Schlagball",
+        id: "80g",
+        disc2pt: dlv_formulas.m._80g,
+        pt2disc: dlv_formulas.m._80g.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      }
+    ]
+  },
+  {
+    name: "Dreikampf SiC/D",
+    id: "dsicd",
+    disciplines: [
+      {
+        name: "50m",
+        id: "50m",
+        disc2pt: dlv_formulas.w._50m,
+        pt2disc: dlv_formulas.w._50m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "long",
+        disc2pt: dlv_formulas.w._long,
+        pt2disc: dlv_formulas.w._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "80g Schlagball",
+        id: "80g",
+        disc2pt: dlv_formulas.w._80g,
+        pt2disc: dlv_formulas.w._80g.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      }
+    ]
+  },
+  {
     name: "Dreikampf SB",
     id: "dsb",
     disciplines: [
@@ -555,7 +621,7 @@ var rechner = [
       },
       {
         name: "Weitsprung",
-        id: "weit",
+        id: "long",
         disc2pt: dlv_formulas.m._long,
         pt2disc: dlv_formulas.m._long.inverse,
         parsedisc: parseMeters,
@@ -567,6 +633,189 @@ var rechner = [
         id: "200g",
         disc2pt: dlv_formulas.m._200g,
         pt2disc: dlv_formulas.m._200g.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      }
+    ]
+  },
+  {
+    name: "Dreikampf SiB",
+    id: "dsib",
+    disciplines: [
+      {
+        name: "75m",
+        id: "75m",
+        disc2pt: dlv_formulas.w._75m,
+        pt2disc: dlv_formulas.w._75m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "long",
+        disc2pt: dlv_formulas.w._long,
+        pt2disc: dlv_formulas.w._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "200g Schlagball",
+        id: "200g",
+        disc2pt: dlv_formulas.w._200g,
+        pt2disc: dlv_formulas.w._200g.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      }
+    ]
+  },
+  {
+    name: "Dreikampf SA",
+    id: "dsa",
+    disciplines: [
+      {
+        name: "100m",
+        id: "100m",
+        disc2pt: dlv_formulas.m._100m,
+        pt2disc: dlv_formulas.m._100m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "long",
+        disc2pt: dlv_formulas.m._long,
+        pt2disc: dlv_formulas.m._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "200g Schlagball",
+        id: "200g",
+        disc2pt: dlv_formulas.m._200g,
+        pt2disc: dlv_formulas.m._200g.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      }
+    ]
+  },
+  {
+    name: "Dreikampf SiA",
+    id: "dsia",
+    disciplines: [
+      {
+        name: "100m",
+        id: "100m",
+        disc2pt: dlv_formulas.w._100m,
+        pt2disc: dlv_formulas.w._100m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "long",
+        disc2pt: dlv_formulas.w._long,
+        pt2disc: dlv_formulas.w._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "200g Schlagball",
+        id: "200g",
+        disc2pt: dlv_formulas.w._200g,
+        pt2disc: dlv_formulas.w._200g.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      }
+    ]
+  },
+  {
+    name: "Vierkampf SC",
+    id: "vsc",
+    disciplines: [
+      {
+        name: "50m",
+        id: "50m",
+        disc2pt: dlv_formulas.m._50m,
+        pt2disc: dlv_formulas.m._50m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "long",
+        disc2pt: dlv_formulas.m._long,
+        pt2disc: dlv_formulas.m._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {
+        name: "Hochsprung",
+        id: "high",
+        disc2pt: dlv_formulas.m._long,
+        pt2disc: dlv_formulas.m._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "80g Schlagball",
+        id: "80g",
+        disc2pt: dlv_formulas.m._80g,
+        pt2disc: dlv_formulas.m._80g.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      }
+    ]
+  },
+  {
+    name: "Vierkampf SiC",
+    id: "vsic",
+    disciplines: [
+      {
+        name: "50m",
+        id: "50m",
+        disc2pt: dlv_formulas.w._50m,
+        pt2disc: dlv_formulas.w._50m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "long",
+        disc2pt: dlv_formulas.w._long,
+        pt2disc: dlv_formulas.w._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {
+        name: "Hochsprung",
+        id: "high",
+        disc2pt: dlv_formulas.w._long,
+        pt2disc: dlv_formulas.w._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "80g Schlagball",
+        id: "80g",
+        disc2pt: dlv_formulas.w._80g,
+        pt2disc: dlv_formulas.w._80g.inverse,
         parsedisc: parseMeters,
         showdisc: showMeters,
         unit: "m"
@@ -588,7 +837,7 @@ var rechner = [
       },
       {
         name: "Weitsprung",
-        id: "weit",
+        id: "long",
         disc2pt: dlv_formulas.m._long,
         pt2disc: dlv_formulas.m._long.inverse,
         parsedisc: parseMeters,
@@ -597,7 +846,7 @@ var rechner = [
       },
       {
         name: "Hochsprung",
-        id: "hoch",
+        id: "high",
         disc2pt: dlv_formulas.m._high,
         pt2disc: dlv_formulas.m._high.inverse,
         parsedisc: parseMeters,
@@ -609,6 +858,132 @@ var rechner = [
         id: "200g",
         disc2pt: dlv_formulas.m._200g,
         pt2disc: dlv_formulas.m._200g.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      }
+    ]
+  },
+  {
+    name: "Vierkampf SiB",
+    id: "vsib",
+    disciplines: [
+      {
+        name: "75m",
+        id: "75m",
+        disc2pt: dlv_formulas.w._75m,
+        pt2disc: dlv_formulas.w._75m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "long",
+        disc2pt: dlv_formulas.w._long,
+        pt2disc: dlv_formulas.w._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {
+        name: "Hochsprung",
+        id: "high",
+        disc2pt: dlv_formulas.w._high,
+        pt2disc: dlv_formulas.w._high.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "200g Schlagball",
+        id: "200g",
+        disc2pt: dlv_formulas.w._200g,
+        pt2disc: dlv_formulas.w._200g.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      }
+    ]
+  },
+  {
+    name: "Vierkampf SA",
+    id: "vsa",
+    disciplines: [
+      {
+        name: "100m",
+        id: "100m",
+        disc2pt: dlv_formulas.m._100m,
+        pt2disc: dlv_formulas.m._100m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "long",
+        disc2pt: dlv_formulas.m._long,
+        pt2disc: dlv_formulas.m._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {
+        name: "Hochsprung",
+        id: "high",
+        disc2pt: dlv_formulas.m._long,
+        pt2disc: dlv_formulas.m._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "Kugel",
+        id: "shot",
+        disc2pt: dlv_formulas.m._shot,
+        pt2disc: dlv_formulas.m._shot.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      }
+    ]
+  },
+  {
+    name: "Vierkampf SiA",
+    id: "vsia",
+    disciplines: [
+      {
+        name: "100m",
+        id: "100m",
+        disc2pt: dlv_formulas.w._100m,
+        pt2disc: dlv_formulas.w._100m.inverse,
+        parsedisc: parseSeconds,
+        showdisc: showSeconds,
+        unit: "s"
+      },
+      {
+        name: "Weitsprung",
+        id: "long",
+        disc2pt: dlv_formulas.w._long,
+        pt2disc: dlv_formulas.w._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {
+        name: "Hochsprung",
+        id: "high",
+        disc2pt: dlv_formulas.w._long,
+        pt2disc: dlv_formulas.w._long.inverse,
+        parsedisc: parseMeters,
+        showdisc: showMeters,
+        unit: "m"
+      },
+      {              
+        name: "Kugel",
+        id: "shot",
+        disc2pt: dlv_formulas.w._shot,
+        pt2disc: dlv_formulas.w._shot.inverse,
         parsedisc: parseMeters,
         showdisc: showMeters,
         unit: "m"
@@ -731,7 +1106,7 @@ var rechner = [
         pt2disc: iaaf_formulas.w._800m.inverse,
         parsedisc: parseMinutes,
         showdisc: showMinutes,
-        unit: "m:s"
+        unit: "min:s"
       }
     ]
   },
@@ -800,7 +1175,7 @@ var rechner = [
         pt2disc: iaaf_formulas.w._800m.inverse,
         parsedisc: parseMinutes,
         showdisc: showMinutes,
-        unit: "m:s"
+        unit: "min:s"
       }
     ]
   },
@@ -896,7 +1271,7 @@ var rechner = [
         pt2disc: iaaf_formulas.m._1500m.inverse,
         parsedisc: parseMinutes,
         showdisc: showMinutes,
-        unit: "m:s"
+        unit: "min:s"
       }
     ]
   }
