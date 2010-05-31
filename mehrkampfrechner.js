@@ -2,12 +2,14 @@
 (function($, _) {
 // business logic here
 
-var parseSeconds = function (s) {
-  return parseFloat(s.replace(',','.'));
+Number.prototype.floor = function (prec) { return Math.floor(this*Math.pow(10,prec))/Math.pow(10,prec); }
+
+var parseSeconds = function (s) {g
+  return parseFloat(s.replace(',','.')).floor(2);
 }
 
 var showSeconds = function (num) {
-  return Math.floor(num * Math.pow(10, 2)) / Math.pow(10, 2);
+  return num.floor(2);
 }
 
 var parseMinutes = function (s) {
@@ -29,11 +31,11 @@ var showMinutes = function(secs) {
 }
 
 var parseMeters = function (m) {
-  return parseFloat(m.replace(',','.'));
+  return parseFloat(m.replace(',','.')).floor(2);
 }
 
 var showMeters = function (num) {
-  return Math.ceil(num * Math.pow(10, 2)) / Math.pow(10, 2);
+  return num.floor(2);
 }
 
 var coderange = function(from, to) { return function(code) { return (code >= from && code <= to); } }
