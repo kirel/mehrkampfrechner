@@ -91,7 +91,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
   
   var t = ''
   t+= '<h2>{{name}}</h2>'
-  t+= '<input type="checkbox" id="{{ns}}-penalize" checked="true"> elektronische Zeitnahme'
+  t+= '<input type="checkbox" id="{{ns}}-penalize" checked="true"><label for="{{ns}}-penalize">elektronische Zeitnahme</label>'
   t+= '<table>'
   t+= '<thead><tr><th>Disziplin</th><th>Leistung</th><th>Einheit</th><th>Punkte</th></tr></thead>'
   t+= '<tfoot><tr><td colspan="3"><label for="{{ns}}-total">Gesamt</label></td><td class="total"><input id="{{ns}}-total" type="text" tabindex="2"/></td></tr></tfoot>'
