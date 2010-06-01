@@ -1075,8 +1075,7 @@ var template = '\
 <option value="{{id}}">{{name}}</option>{{/rechner}}\
 <option value="">Weitere Mehrkämpfe folgen...</option>\
 </select>{{#rechner}}\
-<div id="{{id}}" class="rechner"></div>{{/rechner}}\
-<small><a href="http://www.kirel.de/mehrkampfrechner">Mehrkampfrechner</a> &copy;2010 Daniel Kirsch</small>';
+<div id="{{id}}" class="rechner"></div>{{/rechner}}';
 var html = $.mustache(template, { rechner: rechner }); 
 
 document.write('<div id="kirel-mehrkampf-rechner"></div>');
@@ -1084,6 +1083,15 @@ $('#kirel-mehrkampf-rechner').html(html);
 $.each(rechner, function (i, r) {
   $('#'+r.id).mehrkampfrechner(r.name, r.disciplines);
 })
+
+var backlink = '<small><a id="kirel-mehrkampfrechner" href="http://www.kirel.de/mehrkampfrechner">Mehrkampfrechner</a> &copy;2010 Daniel Kirsch</small>';
+// check for backlink when dom ready
+$(function () {
+  if ($('a[href|=http://www.kirel.de/mehrkampfrechner]').size() < 1) {
+    // add backlink
+    $('#kirel-mehrkampf-rechner').append(backlink);
+  }
+});
 
 /*** adding style ***/
 s = '\
