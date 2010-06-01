@@ -371,9 +371,10 @@ var dlv_run = function (d,a,c,penalty) {
   }
   fn.inverse = function(pt, penalize) {
     if (penalize) {
+      return d/(pt*c+a)-penalty;
     }
     else {
-      return d/(pt*c+a)-penalty;      
+      return d/(pt*c+a);      
     }
   }
   return fn;
