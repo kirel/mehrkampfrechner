@@ -1096,28 +1096,30 @@ $(function () {
 /*** adding style ***/
 s = '\
 <style>\
-  #mehrkampfrechner {\
-    display: table;\
+  #kirel-mehrkampf-rechner {\
+    font-size: 16px;\
+    font-family: Verdana, sans-serif;\
   }\
-  div.discpts {\
-    display: table-row;\
+  #kirel-mehrkampf-rechner td {\
+    padding: 1px 2px;\
   }\
-  div.discipline {\
-    display: table-cell;\
+  #kirel-mehrkampf-rechner input[type=text] {\
+    -moz-border-radius: 3px;\
+    -webkit-border-radius: 3px;\
+    border-radius: 3px;\
+    border: solid #aaa 1px;\
+    padding: 3px;\
   }\
-  div.pts {\
-    display: table-cell;\
-  }\
-  input.set {\
+  #kirel-mehrkampf-rechner input.set {\
     color: black;\
   }\
-  input.calculated {\
+  #kirel-mehrkampf-rechner input.calculated {\
     color: green;\
   }\
-  input.unset {\
+  #kirel-mehrkampf-rechner input.unset {\
     color: gray;\
   }\
-  td.discipline input {\
+  #kirel-mehrkampf-rechner td.discipline input {\
     text-align: right;\
   }\
   </style>\
