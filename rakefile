@@ -1,4 +1,4 @@
-task :default => :package
+task :default => :compile
 
 desc "compile"
 task :compile do
