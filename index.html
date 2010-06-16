@@ -2,7 +2,8 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Mehrkampfrechner</title>
+    <title>Leichtathletik Mehrkampfrechner</title>
+    <meta name="description" content="Ein intelligenter Mehrkampfrechner für die Leichtathletik. Rechnet vorwärts und rückwärts. Lässt sich in die eigene Webseite einbetten.">
     <script type="text/javascript" charset="utf-8" src="jquery-1.4.2.min.js"></script>
     <style type="text/css" media="screen">
       body {
@@ -15,9 +16,11 @@
       #clippy {
         display: inline;
       }
-      h1 aside {
+      h1:after {
         font-size: 0.5em;
         font-weight: normal;
+        content: " (β)";
+        vertical-align: super;
       }
     </style>
   </head>
@@ -34,13 +37,13 @@
     <script type="text/javascript"
     src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     </script>
-    <h1>Leichtathletik Mehrkampfrechner<aside>(&beta;)</aside></h1>
+    <h1>Leichtathletik Mehrkampfrechner</h1>
     <script type="text/javascript" src="http://www.kirel.de/mehrkampfrechner/mehrkampfrechner.min.js"></script><small><a href="http://www.kirel.de/mehrkampfrechner">Mehrkampfrechner</a> &copy;2010 Daniel Kirsch</small>
     <h2>Was?</h2>
     <p>
-      Dies ist ein Mehrkampfrechner für die Leichtathletik. Wähle einen Mehrkampf aus und trage deine Ergebnisse ein. Es werden automatisch die entsprechenden Punkte ausgerechnet.
+      Dies ist ein Mehrkampfrechner für die Leichtathletik. Wähle einen Mehrkampf aus und trage deine Ergebnisse ein. Es werden automatisch die entsprechenden Punkte ausgerechnet. Rückwärtsrechnen geht auch. Trage Punkte ein und es werden die benötigten Ergebnisse ausgerechnet.
     </p>
-    <h2>Wieso?</h2>
+    <h2>Wieso noch ein Mehrkampfrechner?</h2>
     <p>
       Es gibt schon Mehrkampfrechner, aber keiner davon hat mir gefallen. Ich wollte nicht nur die Leistungen in Punkte sondern auch Punkte in benötigte Leistungen umrechnen können. Außerdem gibt es Situationen in denen man eine Zielpunktzahl hat und wissen will, was man in den einzelnen Disziplinen erreichen muss, um in der Summe genügend Punkte zu haben. Das alles kann dieser Mehrkampfrechner. Probier es am besten einfach aus!
     </p>
@@ -48,7 +51,7 @@
     <p>
       Du kannst den Mehrkampfrechner auf deiner eigenen Seite einbetten, indem du folgende Zeile in den HTML-Code deiner Seite einfügst:
     </p>
-    <textarea cols="100" rows="2" readonly>&lt;script type=&quot;text/javascript&quot; src=&quot;http://www.kirel.de/mehrkampfrechner/mehrkampfrechner.min.js&quot;&gt;&lt;/script&gt;&lt;small&gt;&lt;a href=&quot;http://www.kirel.de/mehrkampfrechner&quot;&gt;Mehrkampfrechner&lt;/a&gt; &amp;copy;2010 Daniel Kirsch&lt;/small&gt;      
+    <textarea cols="100" rows="3" readonly>&lt;script type=&quot;text/javascript&quot; src=&quot;http://www.kirel.de/mehrkampfrechner/mehrkampfrechner.min.js&quot;&gt;&lt;/script&gt;&lt;small&gt;&lt;a href=&quot;http://www.kirel.de/mehrkampfrechner&quot;&gt;Mehrkampfrechner&lt;/a&gt; &amp;copy;2010 Daniel Kirsch&lt;/small&gt;      
       </textarea>
     <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
                 width="110"
