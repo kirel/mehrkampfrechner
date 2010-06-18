@@ -1,5 +1,5 @@
 /* Javascript Mehrkampfrechner (c)2010 Daniel Kirsch */
-(function($, _) {
+;(function($, _) {
   
   _.mixin({
     flip : function(fn) {
@@ -19,7 +19,7 @@ var showSeconds = function (num) {
 }
 
 var parseMinutes = function (s) {
-  return _(s.replace(',','.').split(':')).reduce(0, function(res, part) {
+  return _(s.replace(',','.').split(':')).reduce(0.0, function(res, part) {
     return (res * 60) + parseFloat(part);
   });
 }
@@ -1167,4 +1167,4 @@ jQuery.each(qso(), function (id, val) {
 })
 $('#kirel-mehrkampf-rechner .getcalculatorlink').trigger('update');
 
-})($.noConflict(), _.noConflict());
+})(jQuery.noConflict(), _.noConflict());
