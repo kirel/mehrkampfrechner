@@ -89,21 +89,21 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
     
   // set up the html
   
-  var t = ''
-  t+= '<h2>{{name}}</h2>'
-  t+= '<input type="checkbox" id="{{ns}}-penalize" checked="true"><label for="{{ns}}-penalize">elektronische Zeitnahme</label>'
-  t+= '<table>'
-  t+= '<thead><tr><th>Disziplin</th><th>Leistung</th><th>Einheit</th><th>Punkte</th></tr></thead>'
-  t+= '<tfoot><tr><td colspan="3"><label for="{{ns}}-total">Gesamt</label></td><td class="total"><input id="{{ns}}-total" type="text" tabindex="2"/></td></tr></tfoot>'
-  t+= '{{#disciplines}}'
-  t+= '<tr>'
-  t+= '<td class="name"><label for="{{ns}}-{{id}}">{{name}}</label></td>'
-  t+= '<td class="discipline"><input id="{{ns}}-{{id}}" type="text" tabindex="1"/></td><td class="unit">{{unit}}</td>'
-  t+= '<td class="pts"><input id="{{ns}}-{{id}}pts" type="text" tabindex="3"/></td>'
-  t+= '</tr>'
-  t+= '{{/disciplines}}'
-  t+= '</table>'
-  t+= '<small><a class="getcalculatorlink" href="#{{id}}">Link</a> zum Mehrkampf</small>'
+  var t = '';
+  t+= '<h2>{{name}}</h2>';
+  t+= '<input type="checkbox" id="{{ns}}-penalize" checked="true"><label for="{{ns}}-penalize">elektronische Zeitnahme</label>';
+  t+= '<table>';
+  t+= '<thead><tr><th>Disziplin</th><th>Leistung</th><th>Einheit</th><th>Punkte</th></tr></thead>';
+  t+= '<tfoot><tr><td colspan="3"><label for="{{ns}}-total">Gesamt</label></td><td class="total"><input id="{{ns}}-total" type="text" tabindex="2"/></td></tr></tfoot>';
+  t+= '{{#disciplines}}';
+  t+= '<tr>';
+  t+= '<td class="name"><label for="{{ns}}-{{id}}">{{name}}</label></td>';
+  t+= '<td class="discipline"><input id="{{ns}}-{{id}}" type="text" tabindex="1"/></td><td class="unit">{{unit}}</td>';
+  t+= '<td class="pts"><input id="{{ns}}-{{id}}pts" type="text" tabindex="3"/></td>';
+  t+= '</tr>';
+  t+= '{{/disciplines}}';
+  t+= '</table>';
+  t+= '<small><a class="getcalculatorlink" href="#{{id}}">Link</a> zum Mehrkampf</small>';
   var html = $.mustache(t, { disciplines: disciplines, name: name, ns: ns }); 
   
   $(rechner).html(html);
