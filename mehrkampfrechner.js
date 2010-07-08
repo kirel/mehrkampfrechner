@@ -802,10 +802,11 @@ disciplines.dlv.m = {
   _800m: _.extend({},disciplines.iaaf.m._800m, { disc2pt: formulas.dlv.m._800m, pt2disc: formulas.dlv.m._800m.inverse }),
   _1000m: _.extend({},disciplines.iaaf.m._1000m, { disc2pt: formulas.dlv.m._1000m, pt2disc: formulas.dlv.m._1000m.inverse }),
   _1500m: _.extend({},disciplines.iaaf.m._1500m, { disc2pt: formulas.dlv.m._1500m, pt2disc: formulas.dlv.m._1500m.inverse }),
-  _2000m: _.extend({},disciplines.iaaf.m._15000m, {
+  _2000m: _.extend({},disciplines.iaaf.m._1500m, {
     name: "2000m",
     id: "2000m",
-    disc2pt: formulas.dlv.m._2000m, pt2disc: formulas.dlv.m._2000m.inverse
+    disc2pt: formulas.dlv.m._2000m,
+    pt2disc: formulas.dlv.m._2000m.inverse
   }),
   _3000m: _.extend({},disciplines.iaaf.m._3000m, { disc2pt: formulas.dlv.m._3000m, pt2disc: formulas.dlv.m._3000m.inverse }),
   _5000m: _.extend({},disciplines.iaaf.m._5000m, { disc2pt: formulas.dlv.m._5000m, pt2disc: formulas.dlv.m._5000m.inverse }),
