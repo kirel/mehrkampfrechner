@@ -319,7 +319,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
   // setup update event for total
   /*
   update for total ~>
-    if no pts are unset
+    if any pts are set or calculated unless total is set
       update from all pts
     else if total is set
       do nothing
@@ -327,10 +327,11 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
       do nothing
   */
   total.bind('update', function() {
-    if ($('td.pts input.unset', rechner).size() == 0) {
+    var ptsinps = $('td.pts input.set, td.pts input.calculated', rechner);
+    if (!$(this).isSet() && ptsinps.size() > 0) {
       var calculate = function () {
         var totalpts = 0;
-        $("td.pts input", rechner).each(function(index, pts) {
+        ptsinps.each(function(index, pts) {
           totalpts += parsept($(pts).val());
         });
         return showpt(totalpts);
