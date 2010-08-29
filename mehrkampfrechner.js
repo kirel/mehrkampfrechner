@@ -110,7 +110,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
 
   /*** link functionality ***/
   
-  var URL = 'http://www.kirel.de/mehrkampfrechner/';
+  var URL = 'http://kirelabs.org/mehrkampfrechner/';
   
   var getcalculatorlink = $('.getcalculatorlink', rechner).bind('update', function() {
     var sero = {};
@@ -1090,10 +1090,10 @@ $.each(rechner, function (i, r) {
   $('#'+r.id).mehrkampfrechner(r.name, r.disciplines);
 })
 
-var backlink = '<small><a id="kirel-mehrkampfrechner" href="http://www.kirel.de/mehrkampfrechner">Mehrkampfrechner</a> &copy;2010 Daniel Kirsch</small>';
+var backlink = '<small><a id="kirel-mehrkampfrechner" href="http://kirelabs.org/mehrkampfrechner">Mehrkampfrechner</a> &copy;2010 Daniel Kirsch</small>';
 // check for backlink when dom ready
 $(function () {
-  if ($('a[href|=http://www.kirel.de/mehrkampfrechner]').size() < 1) {
+  if ($('a[href|=http://kirelabs.org/mehrkampfrechner]').size() < 1) {
     // add backlink
     $('#kirel-mehrkampf-rechner').append(backlink);
   }
