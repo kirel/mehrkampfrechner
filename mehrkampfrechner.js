@@ -1,5 +1,5 @@
 /* Javascript Mehrkampfrechner (c)2010 Daniel Kirsch */
-;(function($, _) {
+(function($, _) {
   
   _.mixin({
     flip : function(fn) {
@@ -8,21 +8,21 @@
   });
 
 // business logic here
-Number.prototype.floor = function (prec) { return Math.floor(this*Math.pow(10,prec))/Math.pow(10,prec); }
+Number.prototype.floor = function (prec) { return Math.floor(this*Math.pow(10,prec))/Math.pow(10,prec); };
 
 var parseSeconds = function (s) {
   return parseFloat(s.replace(',','.')).floor(2);
-}
+};
 
 var showSeconds = function (num) {
   return num.floor(2);
-}
+};
 
 var parseMinutes = function (s) {
   return _(s.replace(',','.').split(':')).reduce(0.0, function(res, part) {
     return (res * 60) + parseFloat(part);
   });
-}
+};
 
 var showMinutes = function(secs) {
   var s = secs * 100 % 6000 / 100;
@@ -34,18 +34,18 @@ var showMinutes = function(secs) {
   }
   var m = Math.floor(secs/60);
   return [m,s].join(':');
-}
+};
 
 var parseMeters = function (m) {
   return parseFloat(m.replace(',','.')).floor(2);
-}
+};
 
 var showMeters = function (num) {
   return num.floor(2);
-}
+};
 
-var coderange = function(from, to) { return function(code) { return (code >= from && code <= to); } }
-var tab = coderange(9, 9)
+var coderange = function(from, to) { return function(code) { return (code >= from && code <= to); }; };
+var tab = coderange(9, 9);
 var atoz = coderange(65, 90);
 var digit = coderange(48, 57);
 var arrows = coderange(37, 40); // left up right down
@@ -132,7 +132,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
   var total = $('#'+ns+'-total', rechner);
   
   // penalties
-  var penalize = function() { return !$('#'+ns+'-penalize', rechner).is(':checked'); }
+  var penalize = function() { return !$('#'+ns+'-penalize', rechner).is(':checked'); };
   $('#'+ns+'-penalize', rechner).change(function () {
     $('input.set', rechner).keyup();
   });
@@ -145,7 +145,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
       else {
         return originalpt2disc(val);
       }
-    }
+    };
     var originaldisc2pt = discipline.disc2pt;
     discipline.disc2pt = function (val) {
       if (penalize()) {
@@ -154,28 +154,28 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
       else {
         return originaldisc2pt(val);
       }
-    }
+    };
   });
   // helper
   var disenable = function () {
     // disenable pts/disc
-    if (total.isSet() && $('td.pts input.unset', rechner).size() == 1) {
+    if (total.isSet() && $('td.pts input.unset', rechner).size() === 1) {
       $('td.pts input.unset, td.discipline input.unset', rechner).disable();
     }
     else {
       $('td.pts input.unset, td.discipline input.unset', rechner).enable();
     }
     // disenable total
-    if ($('td.pts input.unset', rechner).size() == 0) {
+    if ($('td.pts input.unset', rechner).size() === 0) {
       total.disable();
     }
     else {
       total.enable();
     }
-  }
+  };
   
   var parsept = parseInt;
-  var showpt = function (num) { return Math.floor(num) + '' };
+  var showpt = function (num) { return Math.floor(num).toString(); };
   var sharequeue; // this is used to distribute the left points over the unset pts
   
   var fillShareQueue = function () {
@@ -195,7 +195,8 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
     // fill the sharequeue so that foldl(+, sharequeue) == leftpts
     // initialize
     sharequeue = [];
-    for (var i = 0; i < num; i++) {
+    var i;
+    for (i = 0; i < num; i++) {
       sharequeue.push(0);
     }
     // fill
@@ -205,7 +206,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
       j++;
       leftpts--;
     }
-  }
+  };
   
   // setup the interaction
   $.each(disciplines, function(index, discipline) {
@@ -274,13 +275,14 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
         unset
     */
     $('#'+ns+'-'+discipline.id, rechner).bind('update', function() {
+      var calculate;
       var pts = $('#'+ns+'-'+discipline.id+'pts', rechner);
       if (pts.isSet()) {
-        var calculate = _.compose(discipline.showdisc, discipline.pt2disc, parsept);
+        calculate = _.compose(discipline.showdisc, discipline.pt2disc, parsept);
         $(this).calculate(calculate(pts.val()));
       }
       else if (total.isSet()) {
-        var calculate = _.compose(discipline.showdisc, discipline.pt2disc, parsept);
+        calculate = _.compose(discipline.showdisc, discipline.pt2disc, parsept);
         $(this).unset(calculate(pts.val()));
       }
       else {
@@ -298,16 +300,17 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
         unset
     */
     $('#'+ns+'-'+discipline.id+'pts', rechner).bind('update', function() {
+      var calculate;
       var disc = $('#'+ns+'-'+discipline.id, rechner);
       // FIXME do I need if $(this).isSet() ?
       if (disc.isSet()) {
-        var calculate = _.compose(showpt, discipline.disc2pt, discipline.parsedisc);
+        calculate = _.compose(showpt, discipline.disc2pt, discipline.parsedisc);
         $(this).calculate(calculate(disc.val()));
       }
       else if (total.isSet()) {
-        var calculate = function() {
+        calculate = function() {
           return showpt(sharequeue.pop());
-        }
+        };
         $(this).unset(calculate(total.val()));
       }
       else {
@@ -327,15 +330,16 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
       do nothing
   */
   total.bind('update', function() {
+    var calculate;
     var ptsinps = $('td.pts input.set, td.pts input.calculated', rechner);
     if (!$(this).isSet() && ptsinps.size() > 0) {
-      var calculate = function () {
+      calculate = function () {
         var totalpts = 0;
         ptsinps.each(function(index, pts) {
           totalpts += parsept($(pts).val());
         });
         return showpt(totalpts);
-      }
+      };
       $(this).calculate(calculate());
     }
     else if (!$(this).isSet()) {
@@ -358,7 +362,7 @@ $.fn.mehrkampfrechner = function(name, disciplines) {
     $(this).select();
   });
   
-}
+};
 
 /*** dlv formulas ***/
 var dlv_run = function (d,a,c,penalty) {
@@ -369,7 +373,7 @@ var dlv_run = function (d,a,c,penalty) {
     else {
       return Math.floor((d/m-a)/c);
     }
-  }
+  };
   fn.inverse = function(pt, penalize) {
     if (penalize) {
       return d/(pt*c+a)-penalty;
@@ -377,14 +381,14 @@ var dlv_run = function (d,a,c,penalty) {
     else {
       return d/(pt*c+a);      
     }
-  }
+  };
   return fn;
-}
+};
 var dlv_jump = function (a,c) {
-  var fn = function(m) { return Math.floor((Math.sqrt(m)-a)/c); }
-  fn.inverse = function(m) { return Math.pow(m*c+a, 2); }
+  var fn = function(m) { return Math.floor((Math.sqrt(m)-a)/c); };
+  fn.inverse = function(m) { return Math.pow(m*c+a, 2); };
   return fn;
-}
+};
 var dlv_throw = dlv_jump;
 /*** iaaf formulas ***/
 var iaaf_run = function (a,b,c,penalty) {
@@ -405,17 +409,17 @@ var iaaf_run = function (a,b,c,penalty) {
     }
   };
   return fn;
-}
+};
 var iaaf_throw = function (a,b,c) {
   var fn = function (m) { return Math.floor(a * Math.pow(m-b, c)); };
   fn.inverse = function (pt) { return b + Math.pow(pt/a,1/c); };
   return fn;
-}
+};
 var iaaf_jump = function (a,b,c) {
   var fn = function (m) { return iaaf_throw(a,b,c)(m*100); };
-  fn.inverse = function (m) { return iaaf_throw(a,b,c).inverse(m)/100; }
+  fn.inverse = function (m) { return iaaf_throw(a,b,c).inverse(m)/100; };
   return fn;
-}
+};
 // the formulas
 var formulas = {
   iaaf: {
@@ -953,6 +957,11 @@ var rechner = [
     disciplines: _(['100m', 'high', 'long', 'shot']).from(disciplines.dlv.w)
   },
   {
+    name: "Blockwettkampf Basis mU14",
+    id: "bspsb",
+    disciplines: _(['75m', '60mH', 'long', '200g', '2000m']).from(disciplines.dlv.m)
+  },
+  {
     name: "Blockwettkampf Sprint SB",
     id: "bspsb",
     disciplines: _(['75m', '60mH', 'high', 'long', '200g']).from(disciplines.dlv.m)
@@ -1073,7 +1082,7 @@ var rechner = [
     disciplines: _(['60mH', 'high', 'shot', 'long', '800m']).from(disciplines.iaaf.w)
   }
   // TODO Wurf-Fünfkampf
-]
+];
 /* templates */
 
 var template = '\
@@ -1084,11 +1093,12 @@ var template = '\
 <div id="{{id}}" class="rechner"></div>{{/rechner}}';
 var html = $.mustache(template, { rechner: rechner }); 
 
+/*jshint evil:true */
 document.write('<div id="kirel-mehrkampf-rechner"></div>');
 $('#kirel-mehrkampf-rechner').html(html);
 $.each(rechner, function (i, r) {
   $('#'+r.id).mehrkampfrechner(r.name, r.disciplines);
-})
+});
 
 var backlink = '<small><a id="kirel-mehrkampfrechner" href="http://kirelabs.org/mehrkampfrechner">Mehrkampfrechner</a> &copy;2010 Daniel Kirsch</small>';
 // check for backlink when dom ready
@@ -1137,7 +1147,7 @@ $('.rechner:not(:first)', '#kirel-mehrkampf-rechner').hide();
 var go = function (id) {
   $('.rechner', '#kirel-mehrkampf-rechner').hide();
   $(id, '#kirel-mehrkampf-rechner').show();    
-}
+};
 $('#kirel-mehrkampf-rechner select.nav').change(function() {
   if ($(this).val()) {
     go($('#'+$(this).val()));
@@ -1157,11 +1167,11 @@ var qso = function () {
   else {
     return {};
   }
-}
+};
 // get the hash
 var hash = function() {
   return window.location.hash.split('#')[1];
-}
+};
 // open the right calculator
 if (hash()) {
   $('#kirel-mehrkampf-rechner select.nav').val(hash());
@@ -1170,7 +1180,7 @@ if (hash()) {
 // fill fields
 jQuery.each(qso(), function (id, val) {
   $('#kirel-mehrkampf-rechner #'+id).val(val).keyup();
-})
+});
 $('#kirel-mehrkampf-rechner .getcalculatorlink').trigger('update');
 
-})(jQuery.noConflict(), _.noConflict());
+}(jQuery.noConflict(), _.noConflict()));
