@@ -851,7 +851,7 @@ disciplines.dlv.m = {
   _hammer: _.extend({},disciplines.iaaf.m._hammer, { disc2pt: formulas.dlv.m._hammer, pt2disc: formulas.dlv.m._hammer.inverse }),
   _javelin: _.extend({},disciplines.iaaf.m._javelin, { disc2pt: formulas.dlv.m._javelin, pt2disc: formulas.dlv.m._javelin.inverse }),
   _200g: _.extend({},disciplines.iaaf.m._javelin, {
-    name: "200g Schlagball",
+    name: "200g Ballwurf",
     id: "200g",
     disc2pt: formulas.dlv.m._200g,
     pt2disc: formulas.dlv.m._200g.inverse
@@ -897,62 +897,62 @@ _.mixin({ from: function(list, obj) { return _(list).map(function (disc) { retur
 
 var rechner = [
   {
-    name: "Dreikampf SC/D",
+    name: "Dreikampf mU12/10/8",
     id: "dscd",
     disciplines: _(['50m', 'long', '80g']).from(disciplines.dlv.m)
   },
   {
-    name: "Dreikampf SiC/D",
+    name: "Dreikampf wU12/10/8",
     id: "dsicd",
     disciplines: _(['50m', 'long', '80g']).from(disciplines.dlv.w)
   },
   {
-    name: "Dreikampf SB",
+    name: "Dreikampf mU14",
     id: "dsb",
     disciplines: _(['75m', 'long', '200g']).from(disciplines.dlv.m)
   },
   {
-    name: "Dreikampf SiB",
+    name: "Dreikampf wU14",
     id: "dsib",
     disciplines: _(['75m', 'long', '200g']).from(disciplines.dlv.w)
   },
   {
-    name: "Dreikampf SA",
+    name: "Dreikampf mU16",
     id: "dsa",
-    disciplines: _(['100m', 'long', '200g']).from(disciplines.dlv.m)
+    disciplines: _(['100m', 'long', 'shot']).from(disciplines.dlv.m)
   },
   {
-    name: "Dreikampf SiA",
+    name: "Dreikampf wU16",
     id: "dsia",
-    disciplines: _(['100m', 'long', '200g']).from(disciplines.dlv.w)
+    disciplines: _(['100m', 'long', 'shot']).from(disciplines.dlv.w)
   },
   {
-    name: "Vierkampf SC",
+    name: "Vierkampf mU12",
     id: "vsc",
     disciplines: _(['50m', 'high', 'long', '80g']).from(disciplines.dlv.m)
   },
   {
-    name: "Vierkampf SiC",
+    name: "Vierkampf wU12",
     id: "vsic",
     disciplines: _(['50m', 'high', 'long', '80g']).from(disciplines.dlv.w)
   },
   {
-    name: "Vierkampf SB",
+    name: "Vierkampf mU14",
     id: "vsb",
     disciplines: _(['75m', 'high', 'long', '200g']).from(disciplines.dlv.m)
   },
   {
-    name: "Vierkampf SiB",
+    name: "Vierkampf wU14",
     id: "vsib",
     disciplines: _(['75m', 'high', 'long', '200g']).from(disciplines.dlv.w)
   },
   {
-    name: "Vierkampf SA",
+    name: "Vierkampf mU16",
     id: "vsa",
     disciplines: _(['100m', 'high', 'long', 'shot']).from(disciplines.dlv.m)
   },
   {
-    name: "Vierkampf SiA",
+    name: "Vierkampf wU16",
     id: "vsia",
     disciplines: _(['100m', 'high', 'long', 'shot']).from(disciplines.dlv.w)
   },
@@ -962,77 +962,77 @@ var rechner = [
     disciplines: _(['75m', '60mH', 'long', '200g', '2000m']).from(disciplines.dlv.m)
   },
   {
-    name: "Blockwettkampf Sprint SB",
+    name: "Blockwettkampf Sprint mU14",
     id: "bspsb",
-    disciplines: _(['75m', '60mH', 'high', 'long', '200g']).from(disciplines.dlv.m)
+    disciplines: _(['75m', '60mH', 'high', 'long', 'javelin']).from(disciplines.dlv.m)
   },
   {
-    name: "Blockwettkampf Sprint SiB",
+    name: "Blockwettkampf Sprint wU14",
     id: "bspsia",
-    disciplines: _(['75m', '60mH', 'high', 'long', '200g']).from(disciplines.dlv.w)
+    disciplines: _(['75m', '60mH', 'high', 'long', 'javelin']).from(disciplines.dlv.w)
   },
   {
-    name: "Blockwettkampf Lauf SB",
+    name: "Blockwettkampf Lauf mU14",
     id: "blsb",
-    disciplines: _(['75m', '60mH', 'long', '200g', '1000m']).from(disciplines.dlv.m)
+    disciplines: _(['75m', '60mH', 'long', '200g', '2000m']).from(disciplines.dlv.m)
   },
   {
-    name: "Blockwettkampf Lauf SiB",
+    name: "Blockwettkampf Lauf wU14",
     id: "blsib",
-    disciplines: _(['75m', '60mH', 'long', '200g', '800m']).from(disciplines.dlv.w)
+    disciplines: _(['75m', '60mH', 'long', '200g', '2000m']).from(disciplines.dlv.w)
   },
   {
-    name: "Blockwettkampf Wurf SB",
+    name: "Blockwettkampf Wurf mU14",
     id: "blwsb",
     disciplines: _(['75m', '60mH', 'long', 'shot', 'disc']).from(disciplines.dlv.m)
   },
   {
-    name: "Blockwettkampf Wurf SiB",
+    name: "Blockwettkampf Wurf wU14",
     id: "blwsib",
     disciplines: _(['75m', '60mH', 'long', 'shot', 'disc']).from(disciplines.dlv.w)
   },
   {
-    name: "Blockwettkampf Sprint SA",
+    name: "Blockwettkampf Sprint mU16",
     id: "bspsa",
     disciplines: _(['100m', '80mH', 'high', 'long', 'javelin']).from(disciplines.dlv.m)
   },
   {
-    name: "Blockwettkampf Sprint SiA",
+    name: "Blockwettkampf Sprint wU16",
     id: "bspsia",
     disciplines: _(['100m', '80mH', 'high', 'long', 'javelin']).from(disciplines.dlv.w)
   },
   {
-    name: "Blockwettkampf Lauf SA",
+    name: "Blockwettkampf Lauf mU16",
     id: "blsa",
     disciplines: _(['100m', '80mH', 'long', '200g', '2000m']).from(disciplines.dlv.m)
   },
   {
-    name: "Blockwettkampf Lauf SiA",
+    name: "Blockwettkampf Lauf wU16",
     id: "blsia",
     disciplines: _(['100m', '80mH', 'long', '200g', '2000m']).from(disciplines.dlv.w)
   },
   {
-    name: "Blockwettkampf Wurf SA",
+    name: "Blockwettkampf Wurf mU16",
     id: "blwsa",
     disciplines: _(['100m', '80mH', 'long', 'shot', 'disc']).from(disciplines.dlv.m)
   },
   {
-    name: "Blockwettkampf Wurf SiA",
+    name: "Blockwettkampf Wurf wU16",
     id: "blwsia",
     disciplines: _(['100m', '80mH', 'long', 'shot', 'disc']).from(disciplines.dlv.w)
   },
   {
-    name: "Achtkampf SA",
+    name: "Neunkampf mU16",
     id: "aksa",
-    disciplines: _(['80mH', 'long', 'shot', 'high', 'disc', 'pole', 'javelin', '1000m']).from(disciplines.dlv.m)
+    disciplines: _(['100m', 'long', 'shot', 'high', '80mH', 'disc', 'pole', 'javelin', '1000m']).from(disciplines.dlv.m)
   },
   {
-    name: "Siebenkampf SiA",
+    name: "Siebenkampf wU16",
     id: "sksia",
-    disciplines: _(['80mH', 'high', 'shot', '100m', 'long', 'javelin', '800m']).from(disciplines.dlv.w)
+    disciplines: _(['100m', 'long', 'shot', 'high', '80mH', 'javelin', '800m']).from(disciplines.dlv.w)
   },
   {
-    name: "Fünfkampf MJ",
+    name: "Fünfkampf mU18/20",
     id: "fkmj",
     disciplines: _(['100m', 'long', 'shot', 'high', '400m']).from(disciplines.iaaf.m)
   },
@@ -1047,7 +1047,7 @@ var rechner = [
     disciplines: _(['100m', 'high', 'shot', 'long', "800m"]).from(disciplines.iaaf.w)
   },
   {
-    name: "Zehnkampf M/MJ",
+    name: "Zehnkampf M/mU18/20",
     id: "zk",
     disciplines: _(['100m', 'long', 'shot', 'high', '400m', '110mH', 'disc', 'pole', 'javelin', '1500m']).from(disciplines.iaaf.m)
   },
@@ -1057,27 +1057,27 @@ var rechner = [
     disciplines: _(['60m', 'long', 'shot', 'high', '60mH', 'pole', '1000m']).from(disciplines.iaaf.m)
   },
   {
-    name: "Vierkampf WJB",
+    name: "Vierkampf wU18",
     id: "vkwjb",
     disciplines: _(['100mH', 'high', 'shot', '100m']).from(disciplines.iaaf.w)
   },
   {
-    name: "Vierkampf F/WJA",
+    name: "Vierkampf F/wU20",
     id: "vkfwja",
     disciplines: _(['100mH', 'high', 'shot', '200m']).from(disciplines.iaaf.w)
   },
   {
-    name: "Siebenkampf WJB",
+    name: "Siebenkampf wU18",
     id: "skfwjb",
     disciplines: _(['100mH', 'high', 'shot', '100m', 'long', 'javelin', '800m']).from(disciplines.iaaf.w)
   },
   {
-    name: "Siebenkampf F/WJA",
+    name: "Siebenkampf F/wU20",
     id: "skfwja",
     disciplines: _(['100mH', 'high', 'shot', '200m', 'long', 'javelin', '800m']).from(disciplines.iaaf.w)
   },
   {
-    name: "Fünfkampf F/WJA (Halle)",
+    name: "Fünfkampf F/wU20 (Halle)",
     id: "fkfwja",
     disciplines: _(['60mH', 'high', 'shot', 'long', '800m']).from(disciplines.iaaf.w)
   }
