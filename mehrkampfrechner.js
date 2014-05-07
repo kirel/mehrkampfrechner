@@ -957,11 +957,6 @@ var rechner = [
     disciplines: _(['100m', 'high', 'long', 'shot']).from(disciplines.dlv.w)
   },
   {
-    name: "Blockwettkampf Basis mU14",
-    id: "bspsb",
-    disciplines: _(['75m', '60mH', 'long', '200g', '2000m']).from(disciplines.dlv.m)
-  },
-  {
     name: "Blockwettkampf Sprint mU14",
     id: "bspsb",
     disciplines: _(['75m', '60mH', 'high', 'long', 'javelin']).from(disciplines.dlv.m)
@@ -974,12 +969,12 @@ var rechner = [
   {
     name: "Blockwettkampf Lauf mU14",
     id: "blsb",
-    disciplines: _(['75m', '60mH', 'long', '200g', '2000m']).from(disciplines.dlv.m)
+    disciplines: _(['75m', '60mH', 'long', '200g', '800m']).from(disciplines.dlv.m)
   },
   {
     name: "Blockwettkampf Lauf wU14",
     id: "blsib",
-    disciplines: _(['75m', '60mH', 'long', '200g', '2000m']).from(disciplines.dlv.w)
+    disciplines: _(['75m', '60mH', 'long', '200g', '800m']).from(disciplines.dlv.w)
   },
   {
     name: "Blockwettkampf Wurf mU14",
