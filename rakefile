@@ -13,5 +13,5 @@ end
 
 desc 'release'
 task :release do
-  system 'git co gh-pages && git merge master && git push && git co master'
+  system 'git checkout gh-pages && git merge master && git push && git checkout master'
 end
