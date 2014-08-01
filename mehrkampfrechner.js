@@ -963,7 +963,7 @@ var rechner = [
   },
   {
     name: "Blockwettkampf Sprint wU14",
-    id: "bspsia",
+    id: "bspsib",
     disciplines: _(['75m', '60mH', 'high', 'long', 'javelin']).from(disciplines.dlv.w)
   },
   {
